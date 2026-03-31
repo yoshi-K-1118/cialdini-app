@@ -69,16 +69,21 @@ async def advice_stream(request: AdvisorRequest):
     user_message = f"状況（コンテキスト：{context_label}）：\n{request.situation}"
 
     async def generate():
-        async with client.messages.stream(
-            model="claude-opus-4-6",
-            max_tokens=1500,
-            system=system_prompt,
-            messages=[{"role": "user", "content": user_message}],
-        ) as stream:
-            async for text in stream.text_stream:
-                payload = json.dumps({"text": text}, ensure_ascii=False)
-                yield f"data: {payload}\n\n"
-        yield "data: [DONE]\n\n"
+        try:
+            async with client.messages.stream(
+                model="claude-opus-4-6",
+                max_tokens=1500,
+                system=system_prompt,
+                messages=[{"role": "user", "content": user_message}],
+            ) as stream:
+                async for text in stream.text_stream:
+                    payload = json.dumps({"text": text}, ensure_ascii=False)
+                    yield f"data: {payload}\n\n"
+        except Exception as e:
+            error_payload = json.dumps({"error": str(e)}, ensure_ascii=False)
+            yield f"data: {error_payload}\n\n"
+        finally:
+            yield "data: [DONE]\n\n"
 
     return StreamingResponse(
         generate(),
