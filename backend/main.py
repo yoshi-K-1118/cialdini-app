@@ -22,7 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = anthropic.AsyncAnthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+client = anthropic.AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
 CONTEXT_LABELS = {
     "business": "ビジネス・職場",
@@ -39,7 +39,8 @@ class AdvisorRequest(BaseModel):
 
 @app.get("/api/health")
 async def health():
-    return {"status": "ok"}
+    key = os.environ.get("ANTHROPIC_API_KEY", "")
+    return {"status": "ok", "api_key_set": bool(key), "api_key_prefix": key[:10] + "..." if key else "none"}
 
 
 @app.post("/api/advice/stream")
