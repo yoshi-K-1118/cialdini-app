@@ -22,7 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = anthropic.AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+client = anthropic.AsyncAnthropic()
 
 CONTEXT_LABELS = {
     "business": "ビジネス・職場",
