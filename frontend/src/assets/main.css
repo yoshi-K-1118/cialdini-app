@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+  }
+}
+
+.prose-ai h2 {
+  @apply text-base font-bold text-indigo-700 mt-5 mb-2 pb-1 border-b border-indigo-100;
+}
+.prose-ai ul {
+  @apply list-disc list-inside space-y-1 ml-1 text-gray-700;
+}
+.prose-ai p {
+  @apply mb-2 leading-relaxed text-gray-700;
+}
+.prose-ai strong {
+  @apply font-semibold text-gray-900;
+}
