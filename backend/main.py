@@ -1,52 +1,141 @@
-from fastapi import FastAPI
+import os, json, stripe
+from datetime import datetime, timezone
+from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel
 import anthropic
-import json
-import asyncio
+from supabase import create_client
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 
 app = FastAPI()
 
+FREE_TIER_LIMIT = 5
+
 ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", "*").split(",")
+app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+claude = anthropic.AsyncAnthropic()
+supabase = create_client(os.environ["SUPABASE_URL"], os.environ["SUPABASE_SERVICE_KEY"])
+stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
 
-client = anthropic.AsyncAnthropic()
-
-CONTEXT_LABELS = {
-    "business": "ビジネス・職場",
-    "romance": "恋愛",
-    "friendship": "友人・人間関係",
-    "negotiation": "交渉・説得",
-}
-
+CONTEXT_LABELS = {"business":"ビジネス・職場","romance":"恋愛","friendship":"友人・人間関係","negotiation":"交渉・説得"}
 
 class AdvisorRequest(BaseModel):
     situation: str
     context: str = "business"
 
+class CheckoutRequest(BaseModel):
+    user_id: str
+    email: str
 
+# --- Auth helper ---
+async def get_current_user(authorization: str = Header(None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="認証が必要です")
+    token = authorization.split(" ")[1]
+    try:
+        res = supabase.auth.get_user(token)
+        return res.user
+    except Exception:
+        raise HTTPException(status_code=401, detail="無効なトークンです")
+
+# --- Usage helper ---
+async def check_and_increment_usage(user_id: str) -> dict:
+    """Returns {"allowed": bool, "usage": int, "is_premium": bool}"""
+    res = supabase.table("profiles").select("*").eq("id", user_id).single().execute()
+    profile = res.data
+
+    if profile["is_premium"]:
+        return {"allowed": True, "usage": -1, "is_premium": True}
+
+    # Reset monthly usage if new month
+    reset_at_str = profile.get("usage_reset_at", "")
+    try:
+        reset_at = datetime.fromisoformat(reset_at_str.replace("Z", "+00:00"))
+    except Exception:
+        reset_at = datetime.now(timezone.utc)
+
+    now = datetime.now(timezone.utc)
+    if now.year != reset_at.year or now.month != reset_at.month:
+        supabase.table("profiles").update({
+            "monthly_usage": 0,
+            "usage_reset_at": now.isoformat()
+        }).eq("id", user_id).execute()
+        profile["monthly_usage"] = 0
+
+    if profile["monthly_usage"] >= FREE_TIER_LIMIT:
+        return {"allowed": False, "usage": profile["monthly_usage"], "is_premium": False}
+
+    supabase.table("profiles").update({
+        "monthly_usage": profile["monthly_usage"] + 1
+    }).eq("id", user_id).execute()
+
+    return {"allowed": True, "usage": profile["monthly_usage"] + 1, "is_premium": False}
+
+# --- Endpoints ---
 @app.get("/api/health")
 async def health():
-    key = os.environ.get("ANTHROPIC_API_KEY", "")
-    return {"status": "ok", "api_key_set": bool(key), "api_key_prefix": key[:10] + "..." if key else "none"}
+    return {"status": "ok"}
 
+@app.get("/api/user/profile")
+async def get_profile(authorization: str = Header(None)):
+    user = await get_current_user(authorization)
+    res = supabase.table("profiles").select("*").eq("id", user.id).single().execute()
+    return res.data
+
+@app.post("/api/stripe/create-checkout")
+async def create_checkout(req: CheckoutRequest, authorization: str = Header(None)):
+    await get_current_user(authorization)
+    session = stripe.checkout.Session.create(
+        customer_email=req.email,
+        payment_method_types=["card"],
+        line_items=[{"price": os.environ["STRIPE_PRICE_ID"], "quantity": 1}],
+        mode="subscription",
+        success_url=os.environ["FRONTEND_URL"] + "/success?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url=os.environ["FRONTEND_URL"] + "/pricing",
+        metadata={"user_id": req.user_id},
+    )
+    return {"url": session.url}
+
+@app.post("/api/stripe/webhook")
+async def stripe_webhook(request: Request):
+    payload = await request.body()
+    sig = request.headers.get("stripe-signature", "")
+    try:
+        event = stripe.Webhook.construct_event(payload, sig, os.environ["STRIPE_WEBHOOK_SECRET"])
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    if event["type"] == "checkout.session.completed":
+        session = event["data"]["object"]
+        user_id = session.get("metadata", {}).get("user_id")
+        customer_id = session.get("customer")
+        if user_id:
+            supabase.table("profiles").update({
+                "is_premium": True,
+                "stripe_customer_id": customer_id
+            }).eq("id", user_id).execute()
+
+    elif event["type"] in ("customer.subscription.deleted", "customer.subscription.paused"):
+        customer_id = event["data"]["object"].get("customer")
+        if customer_id:
+            supabase.table("profiles").update({"is_premium": False}).eq("stripe_customer_id", customer_id).execute()
+
+    return {"received": True}
 
 @app.post("/api/advice/stream")
-async def advice_stream(request: AdvisorRequest):
-    context_label = CONTEXT_LABELS.get(request.context, "ビジネス・職場")
+async def advice_stream(req: AdvisorRequest, authorization: str = Header(None)):
+    user = await get_current_user(authorization)
+    usage = await check_and_increment_usage(user.id)
 
+    if not usage["allowed"]:
+        raise HTTPException(status_code=403, detail="LIMIT_REACHED")
+
+    context_label = CONTEXT_LABELS.get(req.context, "ビジネス・職場")
     system_prompt = """あなたはロバート・チャルディーニ博士の「影響力の武器」に精通した専門家です。
 ユーザーが提示した状況を、チャルディーニの7つの影響力の法則（返報性・コミットメントと一貫性・社会的証明・権威・好意・希少性・統一性）の観点から分析し、実践的なアドバイスを提供してください。
 
@@ -55,42 +144,33 @@ async def advice_stream(request: AdvisorRequest):
 ## 使うべき法則
 状況に最も適した法則を1〜3つ選び、なぜその法則が有効かを簡潔に説明してください。
 
-## 具体的なアドバイス（箇条書き3-5個）
-- 実践できる具体的な行動を箇条書きで記述してください
-- 各アドバイスは明確で、すぐに実行できる内容にしてください
+## 具体的なアドバイス
+- 実践できる具体的な行動を箇条書きで3〜5つ記述してください
 
-## 実際に使えるセリフ例（2-3例）
+## 実際に使えるセリフ例
 実際の会話で使えるセリフを2〜3つ、自然な日本語で示してください。
 
 ## 注意点
-この状況でやってはいけないこと、または倫理的に注意すべき点を簡潔に述べてください。
+倫理的に注意すべき点を簡潔に述べてください。
 
 回答は日本語で、温かみのある専門家のトーンで書いてください。"""
 
-    user_message = f"状況（コンテキスト：{context_label}）：\n{request.situation}"
+    user_message = f"状況（コンテキスト：{context_label}）：\n{req.situation}"
 
     async def generate():
         try:
-            async with client.messages.stream(
+            async with claude.messages.stream(
                 model="claude-sonnet-4-6",
                 max_tokens=1500,
                 system=system_prompt,
                 messages=[{"role": "user", "content": user_message}],
             ) as stream:
                 async for text in stream.text_stream:
-                    payload = json.dumps({"text": text}, ensure_ascii=False)
-                    yield f"data: {payload}\n\n"
+                    yield f"data: {json.dumps({'text': text}, ensure_ascii=False)}\n\n"
         except Exception as e:
-            error_payload = json.dumps({"error": str(e)}, ensure_ascii=False)
-            yield f"data: {error_payload}\n\n"
+            yield f"data: {json.dumps({'error': str(e)}, ensure_ascii=False)}\n\n"
         finally:
             yield "data: [DONE]\n\n"
 
-    return StreamingResponse(
-        generate(),
-        media_type="text/event-stream",
-        headers={
-            "Cache-Control": "no-cache",
-            "X-Accel-Buffering": "no",
-        },
-    )
+    return StreamingResponse(generate(), media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
