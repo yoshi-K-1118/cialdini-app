@@ -6,6 +6,11 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import PricingView from '../views/PricingView.vue'
 import SuccessView from '../views/SuccessView.vue'
+import TermsView from '../views/TermsView.vue'
+import PrivacyView from '../views/PrivacyView.vue'
+import DisclaimerView from '../views/DisclaimerView.vue'
+import GuideView from '../views/GuideView.vue'
+import ContactView from '../views/ContactView.vue'
 import { authStore } from '../stores/auth.js'
 
 const router = createRouter({
@@ -18,6 +23,11 @@ const router = createRouter({
     { path: '/register', component: RegisterView },
     { path: '/pricing', component: PricingView },
     { path: '/success', component: SuccessView },
+    { path: '/terms', component: TermsView },
+    { path: '/privacy', component: PrivacyView },
+    { path: '/disclaimer', component: DisclaimerView },
+    { path: '/guide', component: GuideView },
+    { path: '/contact', component: ContactView },
   ],
   scrollBehavior: () => ({ top: 0 }),
 })

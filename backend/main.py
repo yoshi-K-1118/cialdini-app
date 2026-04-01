@@ -32,6 +32,12 @@ class CheckoutRequest(BaseModel):
     user_id: str
     email: str
 
+class ContactRequest(BaseModel):
+    name: str
+    email: str
+    category: str
+    message: str
+
 # --- Auth helper ---
 async def get_current_user(authorization: str = Header(None)):
     if not authorization or not authorization.startswith("Bearer "):
@@ -174,3 +180,31 @@ async def advice_stream(req: AdvisorRequest, authorization: str = Header(None)):
 
     return StreamingResponse(generate(), media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+@app.post("/api/contact")
+async def contact(req: ContactRequest):
+    # メール送信先（環境変数で設定）
+    to_email = os.environ.get("CONTACT_TO_EMAIL", "")
+    if not to_email:
+        # 環境変数未設定でも受信したことにしてログ出力
+        print(f"[CONTACT] from={req.email} name={req.name} category={req.category} msg={req.message[:100]}")
+        return {"received": True}
+
+    import smtplib
+    from email.mime.text import MIMEText
+
+    body = f"名前: {req.name}\nメール: {req.email}\n種別: {req.category}\n\n{req.message}"
+    msg = MIMEText(body, "plain", "utf-8")
+    msg["Subject"] = f"[影響力ガイド お問い合わせ] {req.category} - {req.name}"
+    msg["From"] = os.environ.get("SMTP_FROM", req.email)
+    msg["To"] = to_email
+
+    try:
+        with smtplib.SMTP_SSL(os.environ["SMTP_HOST"], int(os.environ.get("SMTP_PORT", 465))) as server:
+            server.login(os.environ["SMTP_USER"], os.environ["SMTP_PASS"])
+            server.send_message(msg)
+    except Exception as e:
+        print(f"[CONTACT] mail error: {e}")
+        raise HTTPException(status_code=500, detail="送信に失敗しました")
+
+    return {"received": True}
