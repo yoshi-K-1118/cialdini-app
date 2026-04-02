@@ -71,7 +71,7 @@
     <!-- Alternative contact -->
     <div class="mt-6 bg-gray-50 rounded-2xl p-5 text-center">
       <p class="text-sm text-gray-500 mb-1">メールで直接お問い合わせの場合</p>
-      <p class="text-sm font-medium text-indigo-600">support@cialdini-guide.com</p>
+      <p class="text-sm font-medium text-indigo-600">y.k199xtbma@gmail.com</p>
     </div>
   </div>
 </template>
