@@ -95,13 +95,16 @@ async function handleSubmit() {
   loading.value = true
   errorMsg.value = ''
 
-  // Formspree または同等のサービスに送信（URLは環境変数等で管理推奨）
   try {
-    const apiBase = import.meta.env.VITE_API_BASE_URL || ''
-    const res = await fetch(`${apiBase}/api/contact`, {
+    const res = await fetch('https://formspree.io/f/mgoplzoy', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        category: form.category,
+        message: form.message,
+      }),
     })
     if (!res.ok) throw new Error('送信に失敗しました')
     submitted.value = true
