@@ -85,7 +85,12 @@ const dropdownRef = ref(null)
 
 async function handleSignOut() {
   dropdownOpen.value = false
-  await signOut()
+  try {
+    await signOut()
+  } catch (e) {
+    authStore.user = null
+    authStore.profile = null
+  }
   router.push('/')
 }
 
