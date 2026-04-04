@@ -11,7 +11,7 @@
     <!-- Scenario Filter Tabs -->
     <div class="flex gap-2 flex-wrap justify-center mb-4">
       <button
-        @click="selectedScenario = 'all'"
+        @click="selectScenario('all')"
         :class="['px-4 py-2 rounded-full text-sm font-medium transition-colors border',
           selectedScenario === 'all'
             ? 'bg-indigo-600 text-white border-indigo-600'
@@ -21,7 +21,7 @@
       </button>
       <button
         v-for="(meta, key) in scenarioLabels" :key="key"
-        @click="selectedScenario = key"
+        @click="selectScenario(key)"
         :class="['px-4 py-2 rounded-full text-sm font-medium transition-colors border',
           selectedScenario === key
             ? 'bg-indigo-600 text-white border-indigo-600'
@@ -31,14 +31,14 @@
       </button>
     </div>
 
-    <!-- Business Sub-tabs -->
-    <div v-if="selectedScenario === 'business'"
+    <!-- Sub-tabs -->
+    <div v-if="selectedScenario !== 'all' && currentSubs"
       class="flex gap-2 flex-wrap justify-center mb-6 bg-indigo-50 rounded-2xl px-4 py-3">
       <button
-        v-for="(sub, key) in businessSubs" :key="key"
-        @click="selectedBusinessSub = key"
+        v-for="(sub, key) in currentSubs" :key="key"
+        @click="selectedSub = key"
         :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-colors border',
-          selectedBusinessSub === key
+          selectedSub === key
             ? 'bg-indigo-600 text-white border-indigo-600'
             : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"
       >
@@ -78,12 +78,9 @@
           <!-- Scenario Content -->
           <div v-if="selectedScenario !== 'all'" class="mb-4">
             <div class="rounded-xl p-4 mb-3" :style="{ backgroundColor: colorMap[p.color] + '0d' }">
-              <!-- Business sub-label -->
-              <div v-if="selectedScenario === 'business'" class="text-xs font-bold mb-2" :style="{ color: colorMap[p.color] }">
-                {{ businessSubs[selectedBusinessSub].emoji }} {{ businessSubs[selectedBusinessSub].label }}での活用法
-              </div>
-              <div v-else class="text-xs font-bold mb-2" :style="{ color: colorMap[p.color] }">
-                {{ scenarioLabels[selectedScenario].emoji }} {{ scenarioLabels[selectedScenario].label }}での活用法
+              <!-- Sub-label -->
+              <div class="text-xs font-bold mb-2" :style="{ color: colorMap[p.color] }">
+                {{ currentSubs[selectedSub].emoji }} {{ currentSubs[selectedSub].label }}での活用法
               </div>
 
               <!-- Tips -->
@@ -119,11 +116,34 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { principles, scenarioLabels, businessSubs } from '../data/principles.js'
+import { ref, computed } from 'vue'
+import { principles, scenarioLabels, businessSubs, romanceSubs, friendshipSubs, negotiationSubs } from '../data/principles.js'
 
 const selectedScenario = ref('business')
-const selectedBusinessSub = ref('proposal')
+const selectedSub = ref('proposal')
+
+const subsMap = {
+  business:    businessSubs,
+  romance:     romanceSubs,
+  friendship:  friendshipSubs,
+  negotiation: negotiationSubs,
+}
+
+const defaultSub = {
+  business:    'proposal',
+  romance:     'approach',
+  friendship:  'newFriend',
+  negotiation: 'price',
+}
+
+const currentSubs = computed(() => subsMap[selectedScenario.value] ?? null)
+
+function selectScenario(key) {
+  selectedScenario.value = key
+  if (defaultSub[key]) {
+    selectedSub.value = defaultSub[key]
+  }
+}
 
 const colorMap = {
   blue: '#3b82f6', violet: '#8b5cf6', emerald: '#10b981',
@@ -131,16 +151,14 @@ const colorMap = {
 }
 
 function currentTips(p) {
-  if (selectedScenario.value === 'business') {
-    return p.scenarios.business[selectedBusinessSub.value]?.tips ?? []
-  }
-  return p.scenarios[selectedScenario.value]?.tips ?? []
+  const scenario = p.scenarios[selectedScenario.value]
+  if (!scenario) return []
+  return scenario[selectedSub.value]?.tips ?? []
 }
 
 function currentScripts(p) {
-  if (selectedScenario.value === 'business') {
-    return p.scenarios.business[selectedBusinessSub.value]?.scripts ?? []
-  }
-  return p.scenarios[selectedScenario.value]?.scripts ?? []
+  const scenario = p.scenarios[selectedScenario.value]
+  if (!scenario) return []
+  return scenario[selectedSub.value]?.scripts ?? []
 }
 </script>
