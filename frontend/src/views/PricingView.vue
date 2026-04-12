@@ -59,10 +59,16 @@
             <span class="text-white font-bold">✓</span> 優先サポート
           </li>
         </ul>
-        <button v-if="authStore.profile?.is_premium" disabled
-          class="w-full text-center bg-white/30 text-white font-semibold py-2.5 rounded-xl cursor-not-allowed text-sm">
-          ✨ 現在のプラン
-        </button>
+        <template v-if="authStore.profile?.is_premium">
+          <button disabled
+            class="w-full text-center bg-white/30 text-white font-semibold py-2.5 rounded-xl cursor-not-allowed text-sm">
+            ✨ 現在のプラン
+          </button>
+          <button @click="handleManage" :disabled="portalLoading"
+            class="w-full text-center bg-transparent border border-white/50 hover:bg-white/10 disabled:opacity-70 text-white font-semibold py-2.5 rounded-xl transition-colors text-sm mt-2">
+            {{ portalLoading ? '処理中...' : 'サブスクリプションを管理する' }}
+          </button>
+        </template>
         <button v-else @click="handleUpgrade" :disabled="checkoutLoading"
           class="w-full text-center bg-white hover:bg-indigo-50 disabled:opacity-70 text-indigo-700 font-semibold py-2.5 rounded-xl transition-colors text-sm">
           {{ checkoutLoading ? '処理中...' : 'アップグレードする →' }}
@@ -90,6 +96,7 @@ import { authStore, supabase } from '../stores/auth.js'
 
 const router = useRouter()
 const checkoutLoading = ref(false)
+const portalLoading = ref(false)
 
 async function handleUpgrade() {
   if (!authStore.user) {
@@ -111,6 +118,23 @@ async function handleUpgrade() {
     alert('エラーが発生しました。もう一度お試しください。')
   }
   checkoutLoading.value = false
+}
+
+async function handleManage() {
+  portalLoading.value = true
+  try {
+    const token = (await supabase.auth.getSession()).data.session?.access_token
+    const apiBase = import.meta.env.VITE_API_BASE_URL || ''
+    const res = await fetch(`${apiBase}/api/stripe/create-portal`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    const data = await res.json()
+    if (data.url) window.location.href = data.url
+  } catch (e) {
+    alert('エラーが発生しました。もう一度お試しください。')
+  }
+  portalLoading.value = false
 }
 
 const faqs = [

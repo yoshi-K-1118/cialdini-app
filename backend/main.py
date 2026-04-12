@@ -107,6 +107,19 @@ async def create_checkout(req: CheckoutRequest, authorization: str = Header(None
     )
     return {"url": session.url}
 
+@app.post("/api/stripe/create-portal")
+async def create_portal(authorization: str = Header(None)):
+    user = await get_current_user(authorization)
+    res = supabase.table("profiles").select("stripe_customer_id").eq("id", user.id).single().execute()
+    customer_id = res.data.get("stripe_customer_id")
+    if not customer_id:
+        raise HTTPException(status_code=400, detail="Stripeカスタマーが見つかりません")
+    session = stripe.billing_portal.Session.create(
+        customer=customer_id,
+        return_url=os.environ["FRONTEND_URL"] + "/pricing",
+    )
+    return {"url": session.url}
+
 @app.post("/api/stripe/webhook")
 async def stripe_webhook(request: Request):
     payload = await request.body()
