@@ -168,7 +168,11 @@ async def advice_stream(req: AdvisorRequest, authorization: str = Header(None)):
             async with claude.messages.stream(
                 model="claude-sonnet-4-6",
                 max_tokens=1500,
-                system=system_prompt,
+                system=[{
+                    "type": "text",
+                    "text": system_prompt,
+                    "cache_control": {"type": "ephemeral"},
+                }],
                 messages=[{"role": "user", "content": user_message}],
             ) as stream:
                 async for text in stream.text_stream:
