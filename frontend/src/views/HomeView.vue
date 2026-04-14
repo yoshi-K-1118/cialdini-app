@@ -58,7 +58,7 @@
     <section class="bg-white py-16 px-4">
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-10">
-          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">使い方</h2>
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">AIアドバイザーの使い方</h2>
           <p class="text-gray-500 text-sm sm:text-base">3ステップで実践的なアドバイスを手に入れましょう</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
