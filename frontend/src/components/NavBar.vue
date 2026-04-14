@@ -15,13 +15,13 @@
         <div class="flex items-center gap-1">
           <RouterLink
             to="/principles"
-            :class="['px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+            :class="['hidden sm:block px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
               $route.path === '/principles' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100']"
           >📚 法則を学ぶ</RouterLink>
 
           <RouterLink
             to="/advisor"
-            :class="['px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+            :class="['hidden sm:block px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
               $route.path === '/advisor' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100']"
           >🤖 AIに相談</RouterLink>
 
