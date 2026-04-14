@@ -105,8 +105,13 @@ async function handleUpgrade() {
   }
   checkoutLoading.value = true
   try {
-    const token = (await supabase.auth.getSession()).data.session?.access_token
+    console.log('1: getting session')
+    const session = await supabase.auth.getSession()
+    console.log('2: session', session)
+    const token = session.data.session?.access_token
+    console.log('3: token', token ? 'exists' : 'null')
     const apiBase = import.meta.env.VITE_API_BASE_URL || ''
+    console.log('4: apiBase', apiBase)
     const res = await fetch(`${apiBase}/api/stripe/create-checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
