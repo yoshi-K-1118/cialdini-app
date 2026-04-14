@@ -15,23 +15,25 @@
         <div class="flex items-center gap-1">
           <RouterLink
             to="/principles"
-            :class="['hidden sm:block px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+            :class="['hidden md:block px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
               $route.path === '/principles' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100']"
           >📚 法則を学ぶ</RouterLink>
 
           <RouterLink
             to="/advisor"
-            :class="['hidden sm:block px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+            :class="['hidden md:block px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
               $route.path === '/advisor' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100']"
           >🤖 AIに相談</RouterLink>
 
           <!-- Not logged in -->
           <template v-if="!authStore.loading && !authStore.user">
-            <RouterLink to="/login" class="px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">
-              ログイン
+            <RouterLink to="/login" class="px-2 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">
+              <span class="hidden sm:inline">ログイン</span>
+              <span class="sm:hidden">ログイン</span>
             </RouterLink>
-            <RouterLink to="/register" class="ml-1 px-3 py-1.5 rounded-md text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
-              無料で始める
+            <RouterLink to="/register" class="ml-1 px-2 py-1.5 rounded-md text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
+              <span class="hidden sm:inline">無料で始める</span>
+              <span class="sm:hidden">登録</span>
             </RouterLink>
           </template>
 
