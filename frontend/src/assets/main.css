@@ -7,9 +7,9 @@
     font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
     font-size: 24px;
   }
-  nav {
-    font-size: 16px;
-  }
+  nav .text-xs { font-size: 12px !important; }
+  nav .text-sm { font-size: 14px !important; }
+  nav .text-base { font-size: 16px !important; }
 }
 
 .prose-ai h2 {
