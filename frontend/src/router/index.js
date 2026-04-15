@@ -11,6 +11,7 @@ import PrivacyView from '../views/PrivacyView.vue'
 import DisclaimerView from '../views/DisclaimerView.vue'
 import GuideView from '../views/GuideView.vue'
 import ContactView from '../views/ContactView.vue'
+import LegalView from '../views/LegalView.vue'
 import { authStore } from '../stores/auth.js'
 
 const router = createRouter({
@@ -28,6 +29,7 @@ const router = createRouter({
     { path: '/disclaimer', component: DisclaimerView },
     { path: '/guide', component: GuideView },
     { path: '/contact', component: ContactView },
+    { path: '/legal', component: LegalView },
   ],
   scrollBehavior: () => ({ top: 0 }),
 })

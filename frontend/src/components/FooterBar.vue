@@ -20,6 +20,7 @@
           <RouterLink to="/disclaimer" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">免責事項</RouterLink>
           <RouterLink to="/privacy" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">プライバシーポリシー</RouterLink>
           <RouterLink to="/pricing" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">料金プラン</RouterLink>
+          <RouterLink to="/legal" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">特定商取引法</RouterLink>
         </nav>
       </div>
     </div>
