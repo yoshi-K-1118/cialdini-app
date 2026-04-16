@@ -17,23 +17,28 @@
             to="/principles"
             :class="['hidden md:block px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
               $route.path === '/principles' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100']"
-          >📚 法則を学ぶ</RouterLink>
+          >{{ t('nav.principles') }}</RouterLink>
 
           <RouterLink
             to="/advisor"
             :class="['hidden md:block px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
               $route.path === '/advisor' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100']"
-          >🤖 AIに相談</RouterLink>
+          >{{ t('nav.advisor') }}</RouterLink>
+
+          <!-- Language toggle -->
+          <button @click="toggleLocale"
+            class="px-2 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">
+            {{ locale === 'ja' ? 'EN' : 'JA' }}
+          </button>
 
           <!-- Not logged in -->
           <template v-if="!authStore.loading && !authStore.user">
             <RouterLink to="/login" class="px-2 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">
-              <span class="hidden sm:inline">ログイン</span>
-              <span class="sm:hidden">ログイン</span>
+              {{ t('nav.login') }}
             </RouterLink>
             <RouterLink to="/register" class="ml-1 px-2 py-1.5 rounded-md text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
-              <span class="hidden sm:inline">無料で始める</span>
-              <span class="sm:hidden">登録</span>
+              <span class="hidden sm:inline">{{ t('nav.register') }}</span>
+              <span class="sm:hidden">{{ t('nav.registerShort') }}</span>
             </RouterLink>
           </template>
 
@@ -60,12 +65,12 @@
                 class="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
                 <RouterLink to="/pricing" @click="dropdownOpen = false"
                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                  💳 プランを見る
+                  {{ t('nav.pricing') }}
                 </RouterLink>
                 <hr class="my-1 border-gray-100">
                 <button @click="handleSignOut"
                   class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                  ログアウト
+                  {{ t('nav.logout') }}
                 </button>
               </div>
             </div>
@@ -79,7 +84,14 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { authStore, signOut } from '../stores/auth.js'
+
+const { t, locale } = useI18n()
+function toggleLocale() {
+  locale.value = locale.value === 'ja' ? 'en' : 'ja'
+  localStorage.setItem('locale', locale.value)
+}
 
 const router = useRouter()
 const dropdownOpen = ref(false)

@@ -10,24 +10,23 @@
           </svg>
         </div>
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-          チャルディーニの影響力法則を、<br class="hidden sm:block" />日常に。
+          {{ t('home.heroTitle') }}
         </h1>
         <p class="text-indigo-100 text-base sm:text-lg mb-8 leading-relaxed max-w-2xl mx-auto">
-          心理学者ロバート・チャルディーニが発見した7つの影響力の法則を学び、
-          ビジネス・恋愛・人間関係・交渉のあらゆる場面で実践的に活用しましょう。
+          {{ t('home.heroDesc') }}
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <RouterLink
             to="/principles"
             class="inline-block bg-white text-indigo-700 font-semibold px-6 py-3 rounded-xl shadow hover:bg-indigo-50 transition-colors"
           >
-            法則を学ぶ →
+            {{ t('home.learnBtn') }}
           </RouterLink>
           <RouterLink
             to="/advisor"
             class="inline-block border-2 border-white text-white font-semibold px-6 py-3 rounded-xl hover:bg-white hover:text-indigo-700 transition-colors"
           >
-            AIに相談する →
+            {{ t('home.advisorBtn') }}
           </RouterLink>
         </div>
       </div>
@@ -36,8 +35,8 @@
     <!-- 7 Principles Grid -->
     <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="text-center mb-10">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">7つの影響力の法則</h2>
-        <p class="text-gray-500 text-sm sm:text-base">チャルディーニ博士が40年の研究で発見した、人間行動の根本原理</p>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">{{ t('home.principlesTitle') }}</h2>
+        <p class="text-gray-500 text-sm sm:text-base">{{ t('home.principlesDesc') }}</p>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         <RouterLink
@@ -58,33 +57,27 @@
     <section class="bg-white py-16 px-4">
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-10">
-          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">AIアドバイザーの使い方</h2>
-          <p class="text-gray-500 text-sm sm:text-base">3ステップで実践的なアドバイスを手に入れましょう</p>
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">{{ t('home.howTitle') }}</h2>
+          <p class="text-gray-500 text-sm sm:text-base">{{ t('home.howDesc') }}</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div class="text-center">
             <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">✏️</div>
-            <div class="text-sm font-bold text-indigo-600 mb-1">STEP 1</div>
-            <div class="font-bold text-gray-900 mb-2">状況を入力</div>
-            <div class="text-sm text-gray-500 leading-relaxed">
-              悩んでいる状況やシチュエーションを自由に書いてください。ビジネスでも恋愛でも何でもOK。
-            </div>
+            <div class="text-sm font-bold text-indigo-600 mb-1">{{ t('home.step1') }}</div>
+            <div class="font-bold text-gray-900 mb-2">{{ t('home.step1Title') }}</div>
+            <div class="text-sm text-gray-500 leading-relaxed">{{ t('home.step1Desc') }}</div>
           </div>
           <div class="text-center">
             <div class="w-14 h-14 bg-violet-100 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">📖</div>
-            <div class="text-sm font-bold text-violet-600 mb-1">STEP 2</div>
-            <div class="font-bold text-gray-900 mb-2">法則を選ぶ</div>
-            <div class="text-sm text-gray-500 leading-relaxed">
-              AIが状況に合った影響力の法則を選び、なぜその法則が有効かを分析します。
-            </div>
+            <div class="text-sm font-bold text-violet-600 mb-1">{{ t('home.step2') }}</div>
+            <div class="font-bold text-gray-900 mb-2">{{ t('home.step2Title') }}</div>
+            <div class="text-sm text-gray-500 leading-relaxed">{{ t('home.step2Desc') }}</div>
           </div>
           <div class="text-center">
             <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">🚀</div>
-            <div class="text-sm font-bold text-emerald-600 mb-1">STEP 3</div>
-            <div class="font-bold text-gray-900 mb-2">実践する</div>
-            <div class="text-sm text-gray-500 leading-relaxed">
-              具体的なアドバイスと実際に使えるセリフ例を受け取り、今すぐ実践できます。
-            </div>
+            <div class="text-sm font-bold text-emerald-600 mb-1">{{ t('home.step3') }}</div>
+            <div class="font-bold text-gray-900 mb-2">{{ t('home.step3Title') }}</div>
+            <div class="text-sm text-gray-500 leading-relaxed">{{ t('home.step3Desc') }}</div>
           </div>
         </div>
       </div>
@@ -95,17 +88,16 @@
       <div class="max-w-2xl mx-auto text-center">
         <div class="text-4xl mb-4">🤖</div>
         <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">
-          今すぐAIに相談する
+          {{ t('home.ctaTitle') }}
         </h2>
         <p class="text-indigo-200 mb-8 text-sm sm:text-base">
-          あなたの状況を入力するだけ。チャルディーニの法則に基づいた<br class="hidden sm:block" />
-          実践的なアドバイスをリアルタイムで受け取れます。
+          {{ t('home.ctaDesc') }}
         </p>
         <RouterLink
           to="/advisor"
           class="inline-block bg-white text-indigo-700 font-bold px-8 py-3 rounded-xl shadow hover:bg-indigo-50 transition-colors"
         >
-          AIアドバイザーを使ってみる →
+          {{ t('home.ctaBtn') }}
         </RouterLink>
       </div>
     </section>
@@ -113,5 +105,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { principles } from '../data/principles.js'
+const { t } = useI18n()
 </script>

@@ -22,11 +22,13 @@ claude = anthropic.AsyncAnthropic()
 supabase = create_client(os.environ["SUPABASE_URL"], os.environ["SUPABASE_SERVICE_KEY"])
 stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
 
-CONTEXT_LABELS = {"business":"ビジネス・職場","romance":"恋愛","friendship":"友人・人間関係","negotiation":"交渉・説得"}
+CONTEXT_LABELS_JA = {"business":"ビジネス・職場","romance":"恋愛","friendship":"友人・人間関係","negotiation":"交渉・説得"}
+CONTEXT_LABELS_EN = {"business":"Business / Workplace","romance":"Romance","friendship":"Friendship / Social","negotiation":"Negotiation / Persuasion"}
 
 class AdvisorRequest(BaseModel):
     situation: str
     context: str = "business"
+    locale: str = "ja"
 
 class CheckoutRequest(BaseModel):
     user_id: str
@@ -154,8 +156,32 @@ async def advice_stream(req: AdvisorRequest, authorization: str = Header(None)):
     if not usage["allowed"]:
         raise HTTPException(status_code=403, detail="LIMIT_REACHED")
 
-    context_label = CONTEXT_LABELS.get(req.context, "ビジネス・職場")
-    system_prompt = """あなたはロバート・チャルディーニ博士の「影響力の武器」に精通した専門家です。
+    is_english = req.locale == "en"
+
+    if is_english:
+        context_label = CONTEXT_LABELS_EN.get(req.context, "Business / Workplace")
+        system_prompt = """You are an expert in Dr. Robert Cialdini's "Influence: The Psychology of Persuasion."
+Analyze the situation presented by the user through the lens of Cialdini's 7 principles of influence (Reciprocity, Commitment & Consistency, Social Proof, Authority, Liking, Scarcity, Unity) and provide practical, actionable advice.
+
+Always structure your response as follows:
+
+## Principles to Apply
+Select 1-3 principles most relevant to the situation and briefly explain why each is effective here.
+
+## Specific Advice
+- List 3-5 concrete, actionable steps the user can take
+
+## Script Examples
+Provide 2-3 natural, ready-to-use phrases or scripts for real conversations.
+
+## Important Caution
+Briefly note any ethical considerations to keep in mind.
+
+Write in a warm, expert tone in English."""
+        user_message = f"Situation (Context: {context_label}):\n{req.situation}"
+    else:
+        context_label = CONTEXT_LABELS_JA.get(req.context, "ビジネス・職場")
+        system_prompt = """あなたはロバート・チャルディーニ博士の「影響力の武器」に精通した専門家です。
 ユーザーが提示した状況を、チャルディーニの7つの影響力の法則（返報性・コミットメントと一貫性・社会的証明・権威・好意・希少性・統一性）の観点から分析し、実践的なアドバイスを提供してください。
 
 必ず以下の構造で回答してください：
@@ -173,8 +199,7 @@ async def advice_stream(req: AdvisorRequest, authorization: str = Header(None)):
 倫理的に注意すべき点を簡潔に述べてください。
 
 回答は日本語で、温かみのある専門家のトーンで書いてください。"""
-
-    user_message = f"状況（コンテキスト：{context_label}）：\n{req.situation}"
+        user_message = f"状況（コンテキスト：{context_label}）：\n{req.situation}"
 
     async def generate():
         try:

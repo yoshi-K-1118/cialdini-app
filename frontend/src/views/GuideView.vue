@@ -1,23 +1,23 @@
 <template>
   <div class="max-w-3xl mx-auto px-4 py-12">
     <div class="text-center mb-10">
-      <h1 class="text-2xl font-bold text-gray-900 mb-2">使い方ガイド</h1>
-      <p class="text-gray-500 text-sm">影響力ガイドを最大限に活用するための説明です</p>
+      <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ t('guide.title') }}</h1>
+      <p class="text-gray-500 text-sm">{{ t('guide.desc') }}</p>
     </div>
 
     <!-- Quick Navigation -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-12">
       <a href="#principles" class="bg-white border border-gray-200 rounded-xl p-3 text-center text-sm font-medium text-gray-700 hover:border-indigo-300 hover:text-indigo-700 transition-colors">
-        📚 法則を学ぶ
+        {{ t('guide.navPrinciples') }}
       </a>
       <a href="#advisor" class="bg-white border border-gray-200 rounded-xl p-3 text-center text-sm font-medium text-gray-700 hover:border-indigo-300 hover:text-indigo-700 transition-colors">
-        🤖 AIに相談
+        {{ t('guide.navAdvisor') }}
       </a>
       <a href="#plan" class="bg-white border border-gray-200 rounded-xl p-3 text-center text-sm font-medium text-gray-700 hover:border-indigo-300 hover:text-indigo-700 transition-colors">
-        💳 料金プラン
+        {{ t('guide.navPlan') }}
       </a>
       <a href="#faq" class="bg-white border border-gray-200 rounded-xl p-3 text-center text-sm font-medium text-gray-700 hover:border-indigo-300 hover:text-indigo-700 transition-colors">
-        ❓ よくある質問
+        {{ t('guide.navFaq') }}
       </a>
     </div>
 
@@ -27,7 +27,7 @@
       <section id="principles">
         <div class="flex items-center gap-3 mb-5">
           <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-xl">📚</div>
-          <h2 class="text-lg font-bold text-gray-900">法則を学ぶ</h2>
+          <h2 class="text-lg font-bold text-gray-900">{{ t('guide.sec1Title') }}</h2>
         </div>
         <div class="bg-white border border-gray-100 rounded-2xl p-6 space-y-4 shadow-sm">
           <p>トップナビの「法則を学ぶ」から、チャルディーニ博士が発見した7つの影響力の法則を確認できます。</p>
@@ -54,7 +54,7 @@
       <section id="advisor">
         <div class="flex items-center gap-3 mb-5">
           <div class="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center text-xl">🤖</div>
-          <h2 class="text-lg font-bold text-gray-900">AIアドバイザーの使い方</h2>
+          <h2 class="text-lg font-bold text-gray-900">{{ t('guide.sec2Title') }}</h2>
         </div>
         <div class="bg-white border border-gray-100 rounded-2xl p-6 space-y-5 shadow-sm">
           <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-amber-800 text-xs font-medium">
@@ -112,29 +112,28 @@
       <section id="plan">
         <div class="flex items-center gap-3 mb-5">
           <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-xl">💳</div>
-          <h2 class="text-lg font-bold text-gray-900">料金プランについて</h2>
+          <h2 class="text-lg font-bold text-gray-900">{{ t('guide.sec3Title') }}</h2>
         </div>
         <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
           <div class="grid sm:grid-cols-2 gap-4">
             <div class="border-2 border-gray-200 rounded-xl p-5">
-              <div class="font-bold text-gray-900 mb-1">フリープラン</div>
-              <div class="text-2xl font-bold text-gray-900 mb-3">¥0 <span class="text-sm font-normal text-gray-400">/月</span></div>
+              <div class="font-bold text-gray-900 mb-1">{{ t('pricing.freePlan') }}</div>
+              <div class="text-2xl font-bold text-gray-900 mb-3">¥0 <span class="text-sm font-normal text-gray-400">{{ t('pricing.perMonth') }}</span></div>
               <ul class="space-y-2 text-gray-600 text-xs">
-                <li class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> 7つの法則の解説（無制限）</li>
-                <li class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> AIアドバイス 月5回まで</li>
+                <li class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> {{ t('pricing.feature1') }}</li>
+                <li class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> {{ t('pricing.feature2') }}</li>
               </ul>
             </div>
             <div class="border-2 border-indigo-600 bg-indigo-600 rounded-xl p-5">
-              <div class="font-bold text-white mb-1">プレミアムプラン</div>
-              <div class="text-2xl font-bold text-white mb-3">¥980 <span class="text-sm font-normal text-indigo-200">/月</span></div>
+              <div class="font-bold text-white mb-1">{{ t('pricing.premiumPlan') }}</div>
+              <div class="text-2xl font-bold text-white mb-3">¥980 <span class="text-sm font-normal text-indigo-200">{{ t('pricing.perMonth') }}</span></div>
               <ul class="space-y-2 text-indigo-100 text-xs">
-                <li class="flex items-center gap-1.5"><span class="text-white font-bold">✓</span> 7つの法則の解説（無制限）</li>
-                <li class="flex items-center gap-1.5"><span class="text-white font-bold">✓</span> AIアドバイス 無制限</li>
-                <li class="flex items-center gap-1.5"><span class="text-white font-bold">✓</span> 優先サポート</li>
+                <li class="flex items-center gap-1.5"><span class="text-white font-bold">✓</span> {{ t('pricing.feature1') }}</li>
+                <li class="flex items-center gap-1.5"><span class="text-white font-bold">✓</span> {{ t('pricing.feature3') }}</li>
+                <li class="flex items-center gap-1.5"><span class="text-white font-bold">✓</span> {{ t('pricing.feature4') }}</li>
               </ul>
             </div>
           </div>
-          <p class="text-gray-500 text-xs mt-4 text-center">プレミアムプランはいつでも解約可能。次回更新日まで利用できます。</p>
         </div>
       </section>
 
@@ -142,7 +141,7 @@
       <section id="faq">
         <div class="flex items-center gap-3 mb-5">
           <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">❓</div>
-          <h2 class="text-lg font-bold text-gray-900">よくある質問</h2>
+          <h2 class="text-lg font-bold text-gray-900">{{ t('guide.faqTitle') }}</h2>
         </div>
         <div class="space-y-3">
           <div v-for="faq in faqs" :key="faq.q" class="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
@@ -163,9 +162,9 @@
     </div>
 
     <div class="mt-12 text-center bg-indigo-50 rounded-2xl p-6">
-      <p class="text-gray-600 text-sm mb-3">解決しない場合はお気軽にご連絡ください</p>
+      <p class="text-gray-600 text-sm mb-3">{{ t('guide.contactCta') }}</p>
       <RouterLink to="/contact" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition-colors">
-        お問い合わせ →
+        {{ t('guide.contactBtn') }}
       </RouterLink>
     </div>
   </div>
@@ -173,6 +172,9 @@
 
 <script setup>
 import { reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const faqs = reactive([
   {
@@ -197,7 +199,7 @@ const faqs = reactive([
   },
   {
     q: '解約はどこからできますか？',
-    a: '現在は自動解約機能をマイページに準備中です。解約をご希望の場合はお問い合わせページよりご連絡ください。次回更新日の前日までにご連絡いただければ、翌月分の請求は発生しません。',
+    a: '料金ページからサブスクリプション管理画面を開き、解約手続きができます。次回更新日の前日までに解約すれば翌月分の請求は発生しません。',
     open: false,
   },
   {

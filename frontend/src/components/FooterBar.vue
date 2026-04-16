@@ -14,15 +14,20 @@
 
         <!-- Links -->
         <nav class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-          <RouterLink to="/guide" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">使い方ガイド</RouterLink>
-          <RouterLink to="/contact" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">お問い合わせ</RouterLink>
-          <RouterLink to="/terms" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">利用規約</RouterLink>
-          <RouterLink to="/disclaimer" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">免責事項</RouterLink>
-          <RouterLink to="/privacy" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">プライバシーポリシー</RouterLink>
-          <RouterLink to="/pricing" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">料金プラン</RouterLink>
-          <RouterLink to="/legal" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">特定商取引法</RouterLink>
+          <RouterLink to="/guide" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">{{ t('footer.guide') }}</RouterLink>
+          <RouterLink to="/contact" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">{{ t('footer.contact') }}</RouterLink>
+          <RouterLink to="/terms" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">{{ t('footer.terms') }}</RouterLink>
+          <RouterLink to="/disclaimer" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">{{ t('footer.disclaimer') }}</RouterLink>
+          <RouterLink to="/privacy" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">{{ t('footer.privacy') }}</RouterLink>
+          <RouterLink to="/pricing" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">{{ t('footer.pricing') }}</RouterLink>
+          <RouterLink to="/legal" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">{{ t('footer.legal') }}</RouterLink>
         </nav>
       </div>
     </div>
   </footer>
 </template>
+
+<script setup>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+</script>

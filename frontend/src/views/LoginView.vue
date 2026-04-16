@@ -6,20 +6,19 @@
           <circle cx="12" cy="6" r="4"/>
           <path d="M12 12c-5.33 0-8 2.69-8 5v1h16v-1c0-2.31-2.67-5-8-5z"/>
         </svg>
-        <h1 class="text-2xl font-bold text-gray-900">ログイン</h1>
-        <p class="text-gray-500 text-sm mt-1">アカウントにサインインしてください</p>
+        <h1 class="text-2xl font-bold text-gray-900">{{ t('login.title') }}</h1>
       </div>
 
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
         <form @submit.prevent="handleLogin" class="space-y-5">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">メールアドレス</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ t('login.email') }}</label>
             <input v-model="email" type="email" required autocomplete="email"
               class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent"
               placeholder="example@email.com" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">パスワード</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ t('login.password') }}</label>
             <input v-model="password" type="password" required autocomplete="current-password"
               class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent"
               placeholder="••••••••" />
@@ -31,13 +30,13 @@
 
           <button type="submit" :disabled="loading"
             class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold py-2.5 rounded-xl transition-colors text-sm">
-            {{ loading ? 'ログイン中...' : 'ログイン' }}
+            {{ loading ? t('login.loading') : t('login.submit') }}
           </button>
         </form>
 
         <p class="text-center text-sm text-gray-500 mt-6">
-          アカウントをお持ちでない方は
-          <RouterLink to="/register" class="text-indigo-600 font-medium hover:underline">新規登録</RouterLink>
+          {{ t('login.noAccount') }}
+          <RouterLink to="/register" class="text-indigo-600 font-medium hover:underline">{{ t('login.register') }}</RouterLink>
         </p>
       </div>
     </div>
@@ -47,8 +46,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { supabase } from '../stores/auth.js'
 
+const { t } = useI18n()
 const router = useRouter()
 const email = ref('')
 const password = ref('')
@@ -63,7 +64,7 @@ async function handleLogin() {
     password: password.value,
   })
   if (error) {
-    errorMsg.value = 'メールアドレスまたはパスワードが正しくありません'
+    errorMsg.value = t('login.error')
   } else {
     router.push('/advisor')
   }

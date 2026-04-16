@@ -2,7 +2,7 @@
   <div class="flex h-[calc(100vh-3.5rem)]">
     <!-- Sidebar (desktop) -->
     <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 p-4 flex-shrink-0">
-      <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">コンテキスト</h2>
+      <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">{{ t('advisor.contextLabel') }}</h2>
       <div class="space-y-2 mb-6">
         <button
           v-for="(meta, key) in scenarioLabels" :key="key"
@@ -19,10 +19,10 @@
       <div v-if="authStore.profile" class="mb-4">
         <div v-if="authStore.profile.is_premium"
           class="bg-amber-50 rounded-xl p-3 text-xs text-amber-700 font-semibold flex items-center gap-1.5">
-          ✨ プレミアム — 無制限
+          {{ t('advisor.premiumBadge') }}
         </div>
         <div v-else class="bg-gray-50 rounded-xl p-3 text-xs text-gray-600">
-          <div class="font-semibold mb-1">今月の残り回数</div>
+          <div class="font-semibold mb-1">{{ t('advisor.remainingLabel') }}</div>
           <div class="flex items-center gap-2">
             <div class="flex-1 bg-gray-200 rounded-full h-1.5">
               <div class="bg-indigo-500 h-1.5 rounded-full transition-all"
@@ -34,14 +34,14 @@
           </div>
           <RouterLink v-if="authStore.profile.monthly_usage >= 5" to="/pricing"
             class="mt-2 block text-center text-indigo-600 font-semibold hover:underline">
-            アップグレード →
+            {{ t('advisor.upgradeLink') }}
           </RouterLink>
         </div>
       </div>
 
       <div class="bg-indigo-50 rounded-xl p-3 text-xs text-indigo-700 leading-relaxed">
-        <div class="font-bold mb-1">🤖 AIアドバイザーとは</div>
-        チャルディーニの7つの法則を元に、あなたの状況を分析。具体的なアドバイスと実際に使えるセリフ例を提案します。
+        <div class="font-bold mb-1">{{ t('advisor.aboutTitle') }}</div>
+        {{ t('advisor.aboutDesc') }}
       </div>
     </aside>
 
@@ -64,15 +64,15 @@
         <div class="flex items-center gap-2">
           <span class="text-xl">🤖</span>
           <div>
-            <div class="font-semibold text-gray-900 text-sm">チャルディーニAIアドバイザー</div>
-            <div class="text-xs text-gray-400">{{ scenarioLabels[selectedContext].emoji }} {{ scenarioLabels[selectedContext].label }}モード</div>
+            <div class="font-semibold text-gray-900 text-sm">{{ t('advisor.headerTitle') }}</div>
+            <div class="text-xs text-gray-400">{{ scenarioLabels[selectedContext].emoji }} {{ t('advisor.headerMode', { label: scenarioLabels[selectedContext].label }) }}</div>
           </div>
         </div>
         <!-- Mobile usage badge -->
         <div v-if="authStore.profile" class="md:hidden text-xs">
           <span v-if="authStore.profile.is_premium" class="bg-amber-400 text-amber-900 font-bold px-2 py-0.5 rounded-full">✨ PRO</span>
           <span v-else :class="authStore.profile.monthly_usage >= 5 ? 'text-red-500 font-bold' : 'text-gray-500'">
-            残り{{ Math.max(5 - authStore.profile.monthly_usage, 0) }}回
+            {{ t('advisor.remainingLabel') }} {{ Math.max(5 - authStore.profile.monthly_usage, 0) }}
           </span>
         </div>
       </div>
@@ -80,11 +80,11 @@
       <!-- Limit reached banner -->
       <div v-if="limitReached" class="bg-amber-50 border-b border-amber-200 px-4 py-3 flex items-center justify-between flex-shrink-0">
         <div class="text-sm text-amber-800">
-          <span class="font-semibold">今月の無料利用回数（5回）に達しました。</span>
+          <span class="font-semibold">{{ t('advisor.limitBanner') }}</span>
         </div>
         <RouterLink to="/pricing"
           class="ml-3 flex-shrink-0 bg-indigo-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition-colors">
-          プレミアムにアップグレード →
+          {{ t('advisor.upgradeBtn') }}
         </RouterLink>
       </div>
 
@@ -117,7 +117,7 @@
 
       <!-- Input Area -->
       <div class="border-t border-gray-200 bg-white px-4 py-3 flex-shrink-0">
-        <div class="text-xs text-gray-400 mb-2">例: {{ placeholderExamples[selectedContext] }}</div>
+        <div class="text-xs text-gray-400 mb-2">{{ t('advisor.exampleLabel') }} {{ placeholderExamples[selectedContext] }}</div>
         <div class="flex gap-2 items-end">
           <textarea
             ref="textareaEl"
@@ -127,14 +127,14 @@
             rows="3"
             :disabled="isStreaming || limitReached"
             class="flex-1 resize-none border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent disabled:opacity-50 disabled:bg-gray-50"
-            placeholder="状況を入力してください..."
+            :placeholder="t('advisor.placeholder')"
           ></textarea>
           <button @click="sendMessage" :disabled="isStreaming || !userInput.trim() || limitReached"
             class="flex-shrink-0 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-4 py-2 rounded-xl transition-colors text-sm h-fit">
-            送信
+            {{ t('advisor.sendBtn') }}
           </button>
         </div>
-        <div class="text-xs text-gray-300 mt-1">⌘+Enter または Ctrl+Enter で送信</div>
+        <div class="text-xs text-gray-300 mt-1">{{ t('advisor.hint') }}</div>
       </div>
     </div>
   </div>
@@ -143,25 +143,32 @@
 <script setup>
 import { ref, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import { scenarioLabels } from '../data/principles.js'
+import { useI18n } from 'vue-i18n'
 import { authStore, supabase, fetchProfile } from '../stores/auth.js'
 
+const { t, locale } = useI18n()
 const router = useRouter()
 const selectedContext = ref('business')
 const userInput = ref('')
+
+const scenarioLabels = computed(() => ({
+  business:    { label: t('advisor.contexts.business.label'),    emoji: '💼' },
+  romance:     { label: t('advisor.contexts.romance.label'),     emoji: '💕' },
+  friendship:  { label: t('advisor.contexts.friendship.label'),  emoji: '👫' },
+  negotiation: { label: t('advisor.contexts.negotiation.label'), emoji: '🤝' },
+}))
+
+const placeholderExamples = computed(() => ({
+  business:    t('advisor.placeholders.business'),
+  romance:     t('advisor.placeholders.romance'),
+  friendship:  t('advisor.placeholders.friendship'),
+  negotiation: t('advisor.placeholders.negotiation'),
+}))
+
 const messages = ref([
   {
     role: 'ai',
-    content: `## ようこそ！チャルディーニAIアドバイザーです 🧍
-
-チャルディーニ博士の7つの影響力の法則を活用して、あなたの状況に最適なアドバイスをご提案します。
-
-- ビジネスや職場での人間関係・プレゼン・交渉
-- 恋愛や気になる人へのアプローチ
-- 友人・知人との関係強化
-- 重要な交渉・説得のシナリオ
-
-左のメニュー（またはタブ）でコンテキストを選んで、悩んでいる状況を自由に書いてみてください。`,
+    content: t('advisor.welcomeMsg'),
   },
 ])
 const isStreaming = ref(false)
@@ -169,13 +176,6 @@ const currentMessage = ref('')
 const messagesEl = ref(null)
 const textareaEl = ref(null)
 const limitReached = ref(false)
-
-const placeholderExamples = {
-  business: '「上司に新しい企画を通したいのですが、なかなか聞いてもらえません」',
-  romance: '「気になる人がいるのですが、どうやってアプローチすればいいかわかりません」',
-  friendship: '「友人グループで自分だけ意見が通りにくくて悩んでいます」',
-  negotiation: '「取引先に価格交渉をしたいのですが、うまく切り出せません」',
-}
 
 function renderMarkdown(text) {
   const lines = text.split('\n')
@@ -228,7 +228,7 @@ async function sendMessage() {
         'Content-Type': 'application/json',
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
-      body: JSON.stringify({ situation: text, context: selectedContext.value }),
+      body: JSON.stringify({ situation: text, context: selectedContext.value, locale: locale.value }),
     })
 
     if (response.status === 401) {

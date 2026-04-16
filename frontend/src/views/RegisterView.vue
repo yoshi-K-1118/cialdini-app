@@ -6,26 +6,24 @@
           <circle cx="12" cy="6" r="4"/>
           <path d="M12 12c-5.33 0-8 2.69-8 5v1h16v-1c0-2.31-2.67-5-8-5z"/>
         </svg>
-        <h1 class="text-2xl font-bold text-gray-900">新規登録</h1>
-        <p class="text-gray-500 text-sm mt-1">無料で始められます</p>
+        <h1 class="text-2xl font-bold text-gray-900">{{ t('register.title') }}</h1>
       </div>
 
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
         <div v-if="successMsg" class="bg-indigo-50 text-indigo-700 text-sm rounded-xl px-4 py-4 text-center">
           <div class="text-2xl mb-2">📧</div>
           <div class="font-semibold">{{ successMsg }}</div>
-          <div class="text-indigo-500 mt-1">メールのリンクをクリックして登録を完了してください</div>
         </div>
 
         <form v-else @submit.prevent="handleRegister" class="space-y-5">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">メールアドレス</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ t('register.email') }}</label>
             <input v-model="email" type="email" required autocomplete="email"
               class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent"
               placeholder="example@email.com" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">パスワード（6文字以上）</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ t('register.password') }}</label>
             <input v-model="password" type="password" required minlength="6" autocomplete="new-password"
               class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent"
               placeholder="••••••••" />
@@ -37,13 +35,13 @@
 
           <button type="submit" :disabled="loading"
             class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold py-2.5 rounded-xl transition-colors text-sm">
-            {{ loading ? '登録中...' : '無料で登録する' }}
+            {{ loading ? t('register.loading') : t('register.submit') }}
           </button>
         </form>
 
         <p class="text-center text-sm text-gray-500 mt-6">
-          すでにアカウントをお持ちの方は
-          <RouterLink to="/login" class="text-indigo-600 font-medium hover:underline">ログイン</RouterLink>
+          {{ t('register.hasAccount') }}
+          <RouterLink to="/login" class="text-indigo-600 font-medium hover:underline">{{ t('register.login') }}</RouterLink>
         </p>
       </div>
     </div>
@@ -52,8 +50,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { supabase } from '../stores/auth.js'
 
+const { t, locale } = useI18n()
 const email = ref('')
 const password = ref('')
 const loading = ref(false)
@@ -68,9 +68,9 @@ async function handleRegister() {
     password: password.value,
   })
   if (error) {
-    errorMsg.value = error.message
+    errorMsg.value = t('register.error')
   } else {
-    successMsg.value = '確認メールを送信しました'
+    successMsg.value = locale.value === 'ja' ? '確認メールを送信しました' : 'Confirmation email sent. Please check your inbox.'
   }
   loading.value = false
 }

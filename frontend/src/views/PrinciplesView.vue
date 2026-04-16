@@ -2,9 +2,9 @@
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <!-- Page Header -->
     <div class="text-center mb-10">
-      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">7つの影響力の法則</h1>
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">{{ t('principles.title') }}</h1>
       <p class="text-gray-500 text-sm sm:text-base max-w-2xl mx-auto">
-        チャルディーニ博士が発見した影響力の法則を学び、コンテキスト別の実践方法を確認しましょう。
+        {{ t('principles.desc') }}
       </p>
     </div>
 
@@ -17,7 +17,7 @@
             ? 'bg-indigo-600 text-white border-indigo-600'
             : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"
       >
-        🌐 すべて
+        {{ t('principles.allFilter') }}
       </button>
       <button
         v-for="(meta, key) in scenarioLabels" :key="key"
@@ -80,7 +80,7 @@
             <div class="rounded-xl p-4 mb-3" :style="{ backgroundColor: colorMap[p.color] + '0d' }">
               <!-- Sub-label -->
               <div class="text-xs font-bold mb-2" :style="{ color: colorMap[p.color] }">
-                {{ currentSubs[selectedSub].emoji }} {{ currentSubs[selectedSub].label }}での活用法
+                {{ currentSubs[selectedSub].emoji }} {{ currentSubs[selectedSub].label }}{{ t('principles.usageLabel') }}
               </div>
 
               <!-- Tips -->
@@ -94,7 +94,7 @@
 
               <!-- Scripts -->
               <div class="space-y-2">
-                <div class="text-xs font-semibold text-gray-500 mb-1">💬 セリフ例</div>
+                <div class="text-xs font-semibold text-gray-500 mb-1">{{ t('principles.scriptLabel') }}</div>
                 <blockquote v-for="(script, i) in currentScripts(p)" :key="i"
                   class="border-l-2 pl-3 text-sm text-gray-600 italic leading-relaxed"
                   :style="{ borderColor: colorMap[p.color] }">
@@ -106,7 +106,7 @@
 
           <!-- Caution -->
           <div class="bg-amber-50 border border-amber-100 rounded-xl p-3">
-            <div class="text-xs font-bold text-amber-700 mb-1">⚠️ 注意点</div>
+            <div class="text-xs font-bold text-amber-700 mb-1">{{ t('principles.cautionLabel') }}</div>
             <p class="text-xs text-amber-800 leading-relaxed">{{ p.caution }}</p>
           </div>
         </div>
@@ -117,10 +117,20 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { principles, scenarioLabels, businessSubs, romanceSubs, friendshipSubs, negotiationSubs } from '../data/principles.js'
+import { useI18n } from 'vue-i18n'
+import { principles, businessSubs, romanceSubs, friendshipSubs, negotiationSubs } from '../data/principles.js'
+
+const { t } = useI18n()
 
 const selectedScenario = ref('business')
 const selectedSub = ref('proposal')
+
+const scenarioLabels = computed(() => ({
+  business:    { label: t('advisor.contexts.business.label'),    emoji: '💼' },
+  romance:     { label: t('advisor.contexts.romance.label'),     emoji: '💕' },
+  friendship:  { label: t('advisor.contexts.friendship.label'),  emoji: '👫' },
+  negotiation: { label: t('advisor.contexts.negotiation.label'), emoji: '🤝' },
+}))
 
 const subsMap = {
   business:    businessSubs,
