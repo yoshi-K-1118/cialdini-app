@@ -118,9 +118,12 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { principles, businessSubs, romanceSubs, friendshipSubs, negotiationSubs } from '../data/principles.js'
+import { principles as principlesJa, businessSubs as businessSubsJa, romanceSubs as romanceSubsJa, friendshipSubs as friendshipSubsJa, negotiationSubs as negotiationSubsJa } from '../data/principles.js'
+import { principles as principlesEn, businessSubs as businessSubsEn, romanceSubs as romanceSubsEn, friendshipSubs as friendshipSubsEn, negotiationSubs as negotiationSubsEn } from '../data/principles_en.js'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+const principles = computed(() => locale.value === 'en' ? principlesEn : principlesJa)
 
 const selectedScenario = ref('business')
 const selectedSub = ref('proposal')
@@ -132,17 +135,22 @@ const scenarioLabels = computed(() => ({
   negotiation: { label: t('advisor.contexts.negotiation.label'), emoji: '🤝' },
 }))
 
-// Merge translated labels with emojis from principles.js data
-const rawSubsMap = {
-  business:    businessSubs,
-  romance:     romanceSubs,
-  friendship:  friendshipSubs,
-  negotiation: negotiationSubs,
-}
+// Merge translated labels with emojis from principles data
+const rawSubsMap = computed(() => locale.value === 'en' ? {
+  business:    businessSubsEn,
+  romance:     romanceSubsEn,
+  friendship:  friendshipSubsEn,
+  negotiation: negotiationSubsEn,
+} : {
+  business:    businessSubsJa,
+  romance:     romanceSubsJa,
+  friendship:  friendshipSubsJa,
+  negotiation: negotiationSubsJa,
+})
 
 const subsMap = computed(() => {
   const result = {}
-  for (const [scenario, subs] of Object.entries(rawSubsMap)) {
+  for (const [scenario, subs] of Object.entries(rawSubsMap.value)) {
     result[scenario] = Object.fromEntries(
       Object.entries(subs).map(([key, val]) => [
         key,

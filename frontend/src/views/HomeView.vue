@@ -48,7 +48,7 @@
           <div class="text-3xl mb-2">{{ p.emoji }}</div>
           <div class="font-bold text-gray-900 text-sm mb-1 group-hover:text-indigo-700 transition-colors">{{ p.name }}</div>
           <div class="text-xs text-gray-400 mb-2">{{ p.subtitle }}</div>
-          <div class="text-xs text-gray-600 leading-relaxed line-clamp-2">{{ p.description.split('。')[0] }}。</div>
+          <div class="text-xs text-gray-600 leading-relaxed line-clamp-2">{{ p.description.split(/。|\./)[0] }}{{ locale === 'en' ? '.' : '。' }}</div>
         </RouterLink>
       </div>
     </section>
@@ -105,7 +105,12 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { principles } from '../data/principles.js'
-const { t } = useI18n()
+import { principles as principlesJa } from '../data/principles.js'
+import { principles as principlesEn } from '../data/principles_en.js'
+
+const { t, locale } = useI18n()
+
+const principles = computed(() => locale.value === 'en' ? principlesEn : principlesJa)
 </script>
