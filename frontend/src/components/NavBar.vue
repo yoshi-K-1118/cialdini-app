@@ -8,7 +8,7 @@
             <circle cx="12" cy="6" r="4"/>
             <path d="M12 12c-5.33 0-8 2.69-8 5v1h16v-1c0-2.31-2.67-5-8-5z"/>
           </svg>
-          <span class="text-base">影響力ガイド</span>
+          <span class="text-base">{{ t('nav.appName') }}</span>
         </RouterLink>
 
         <!-- Nav links -->
@@ -51,7 +51,7 @@
             </span>
             <span v-else-if="authStore.profile"
               class="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-              {{ authStore.profile.monthly_usage }}/5回
+              {{ authStore.profile.monthly_usage }}/5{{ t('nav.usageSuffix') }}
             </span>
 
             <!-- User dropdown -->

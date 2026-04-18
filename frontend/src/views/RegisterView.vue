@@ -53,7 +53,7 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { supabase } from '../stores/auth.js'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const email = ref('')
 const password = ref('')
 const loading = ref(false)
@@ -70,7 +70,7 @@ async function handleRegister() {
   if (error) {
     errorMsg.value = t('register.error')
   } else {
-    successMsg.value = locale.value === 'ja' ? '確認メールを送信しました' : 'Confirmation email sent. Please check your inbox.'
+    successMsg.value = t('register.successMsg')
   }
   loading.value = false
 }

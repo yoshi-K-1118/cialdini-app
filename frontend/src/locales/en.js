@@ -1,5 +1,6 @@
 export default {
   nav: {
+    appName: 'Influence Guide',
     principles: '📚 Learn Principles',
     advisor: '🤖 AI Advisor',
     login: 'Login',
@@ -7,6 +8,7 @@ export default {
     registerShort: 'Sign Up',
     pricing: '💳 View Plans',
     logout: 'Logout',
+    usageSuffix: ' uses',
   },
   footer: {
     guide: 'How to Use',
@@ -86,6 +88,7 @@ export default {
     terms: 'Terms of Service',
     privacy: 'Privacy Policy',
     agree: 'By registering, you agree to our',
+    successMsg: 'Confirmation email sent. Please check your inbox.',
   },
   success: {
     title: 'Upgrade Complete!',
@@ -221,6 +224,36 @@ Select a context from the menu and describe your situation freely.`,
       { title: 'Article 8 — Governing Law & Jurisdiction', body: 'These Terms are governed by the laws of Japan. Any disputes arising from the Service shall be subject to the exclusive jurisdiction of the court with jurisdiction over the operator\'s location.' },
     ],
   },
+  principlesSubs: {
+    business: {
+      proposal: 'Boss Proposal',
+      sales: 'Sales & Deals',
+      team: 'Team Management',
+      internal: 'Internal Coordination',
+      career: 'Salary & Promotion',
+    },
+    romance: {
+      approach: 'First Approach',
+      date: 'Dating & Getting Closer',
+      confession: 'Confession & Bonding',
+      maintain: 'Long-term & Partnership',
+      reunion: 'Reconciliation',
+    },
+    friendship: {
+      newFriend: 'Making New Friends',
+      deepen: 'Deepen Relationship',
+      group: 'Group Presence',
+      support: 'Mutual Support & Trust',
+      repair: 'Reconnecting',
+    },
+    negotiation: {
+      price: 'Price & Terms',
+      persuade: 'Pitching Ideas',
+      request: 'Asking Favors',
+      conflict: 'Conflict & Complaints',
+      daily: 'Everyday Situations',
+    },
+  },
   privacy: {
     title: 'Privacy Policy',
     updated: 'Last updated: April 1, 2026',
@@ -238,7 +271,7 @@ Select a context from the menu and describe your situation freely.`,
       { title: '6. Access, Correction & Deletion', body: 'You may request access to, correction of, or deletion of your personal information. Please reach out via our contact page. We will respond within a reasonable timeframe after verifying your identity.' },
       { title: '7. Security', body: 'We take appropriate security measures to prevent unauthorized access, leakage, or alteration of collected data. However, we cannot guarantee complete security over the internet.' },
       { title: '8. Changes to This Policy', body: 'We may update this Policy as needed. Continued use of the Service after changes constitutes acceptance of the revised Policy.' },
-      { title: '9. Contact', bodyWithLink: true },
+      { title: '9. Contact', bodyWithLink: true, contactPre: 'For questions or requests regarding your personal information, please reach out via our ', contactPost: '.' },
     ],
   },
   disclaimer: {

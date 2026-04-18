@@ -132,12 +132,26 @@ const scenarioLabels = computed(() => ({
   negotiation: { label: t('advisor.contexts.negotiation.label'), emoji: '🤝' },
 }))
 
-const subsMap = {
+// Merge translated labels with emojis from principles.js data
+const rawSubsMap = {
   business:    businessSubs,
   romance:     romanceSubs,
   friendship:  friendshipSubs,
   negotiation: negotiationSubs,
 }
+
+const subsMap = computed(() => {
+  const result = {}
+  for (const [scenario, subs] of Object.entries(rawSubsMap)) {
+    result[scenario] = Object.fromEntries(
+      Object.entries(subs).map(([key, val]) => [
+        key,
+        { ...val, label: t(`principlesSubs.${scenario}.${key}`) },
+      ])
+    )
+  }
+  return result
+})
 
 const defaultSub = {
   business:    'proposal',
@@ -146,7 +160,7 @@ const defaultSub = {
   negotiation: 'price',
 }
 
-const currentSubs = computed(() => subsMap[selectedScenario.value] ?? null)
+const currentSubs = computed(() => subsMap.value[selectedScenario.value] ?? null)
 
 function selectScenario(key) {
   selectedScenario.value = key

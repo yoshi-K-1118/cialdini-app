@@ -1,5 +1,6 @@
 export default {
   nav: {
+    appName: '影響力ガイド',
     principles: '📚 法則を学ぶ',
     advisor: '🤖 AIに相談',
     login: 'ログイン',
@@ -7,6 +8,7 @@ export default {
     registerShort: '登録',
     pricing: '💳 プランを見る',
     logout: 'ログアウト',
+    usageSuffix: '回',
   },
   footer: {
     guide: '使い方ガイド',
@@ -86,6 +88,7 @@ export default {
     terms: '利用規約',
     privacy: 'プライバシーポリシー',
     agree: 'に同意の上、ご登録ください。',
+    successMsg: '確認メールを送信しました。受信ボックスをご確認ください。',
   },
   success: {
     title: 'アップグレード完了！',
@@ -221,6 +224,36 @@ export default {
       { title: '第8条（準拠法・裁判管轄）', body: '本規約の解釈にあたっては、日本法を準拠法とします。本サービスに関して生じた紛争については、当運営の所在地を管轄する裁判所を専属的合意管轄とします。' },
     ],
   },
+  principlesSubs: {
+    business: {
+      proposal: '上司への提案',
+      sales: '営業・商談',
+      team: 'チーム管理',
+      internal: '社内調整',
+      career: '昇給・昇進',
+    },
+    romance: {
+      approach: '初アプローチ',
+      date: 'デート・距離を縮める',
+      confession: '告白・関係強化',
+      maintain: '長続き・パートナー',
+      reunion: '復縁・関係修復',
+    },
+    friendship: {
+      newFriend: '新しい友人作り',
+      deepen: '関係を深める',
+      group: 'グループの存在感',
+      support: '助け合い・信頼構築',
+      repair: '疎遠・関係修復',
+    },
+    negotiation: {
+      price: '価格・条件交渉',
+      persuade: '意見・提案を通す',
+      request: '頼み事・お願い',
+      conflict: 'トラブル・クレーム対応',
+      daily: '日常の場面',
+    },
+  },
   privacy: {
     title: 'プライバシーポリシー',
     updated: '最終更新日：2026年4月1日',
@@ -238,7 +271,7 @@ export default {
       { title: '6. 個人情報の開示・訂正・削除', body: 'ユーザーは、自身の個人情報の開示・訂正・削除を当運営に請求することができます。お問い合わせページよりご連絡ください。本人確認のうえ、合理的な期間内に対応します。' },
       { title: '7. セキュリティ', body: '当運営は、収集した個人情報の漏洩・不正アクセス・改ざんを防ぐため、適切な安全管理措置を講じます。ただし、インターネット上での完全な安全を保証するものではありません。' },
       { title: '8. 本ポリシーの変更', body: '当運営は、必要に応じて本ポリシーを変更することがあります。変更後に本サービスを利用した場合、変更後のポリシーに同意したものとみなします。' },
-      { title: '9. お問い合わせ', bodyWithLink: true },
+      { title: '9. お問い合わせ', bodyWithLink: true, contactPre: '個人情報の取り扱いに関するご質問・ご要望は、', contactPost: 'よりご連絡ください。' },
     ],
   },
   disclaimer: {

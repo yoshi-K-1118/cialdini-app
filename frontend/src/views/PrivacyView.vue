@@ -25,7 +25,7 @@
 
         <!-- Contact section with link -->
         <p v-if="sec.bodyWithLink">
-          {{ locale === 'ja' ? '個人情報の取り扱いに関するご質問・ご要望は、' : 'For questions or requests regarding your personal information, please reach out via our ' }}<RouterLink to="/contact" class="text-indigo-600 hover:underline">{{ t('privacy.contactLink') }}</RouterLink>{{ locale === 'ja' ? 'よりご連絡ください。' : '.' }}
+          {{ sec.contactPre }}<RouterLink to="/contact" class="text-indigo-600 hover:underline">{{ t('privacy.contactLink') }}</RouterLink>{{ sec.contactPost }}
         </p>
       </section>
     </div>
@@ -34,5 +34,5 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
-const { t, locale } = useI18n()
+const { t } = useI18n()
 </script>
