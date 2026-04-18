@@ -30,20 +30,20 @@
           <h2 class="text-lg font-bold text-gray-900">{{ t('guide.sec1Title') }}</h2>
         </div>
         <div class="bg-white border border-gray-100 rounded-2xl p-6 space-y-4 shadow-sm">
-          <p>トップナビの「法則を学ぶ」から、チャルディーニ博士が発見した7つの影響力の法則を確認できます。</p>
+          <p>{{ t('guide.sec1Intro') }}</p>
           <div class="space-y-3">
             <div class="flex items-start gap-3">
               <span class="text-indigo-600 font-bold mt-0.5">1.</span>
               <div>
-                <div class="font-semibold text-gray-800">シナリオフィルター</div>
-                <p class="text-gray-500">「ビジネス」「恋愛」「友人関係」「交渉」の4タブを切り替えることで、そのシーンに特化した事例や活用法が表示されます。</p>
+                <div class="font-semibold text-gray-800">{{ t('guide.sec1Step1Title') }}</div>
+                <p class="text-gray-500">{{ t('guide.sec1Step1Desc') }}</p>
               </div>
             </div>
             <div class="flex items-start gap-3">
               <span class="text-indigo-600 font-bold mt-0.5">2.</span>
               <div>
-                <div class="font-semibold text-gray-800">法則カードをクリック</div>
-                <p class="text-gray-500">各法則のカードをクリックすると詳細が展開され、具体的な活用事例と実践のポイントが確認できます。</p>
+                <div class="font-semibold text-gray-800">{{ t('guide.sec1Step2Title') }}</div>
+                <p class="text-gray-500">{{ t('guide.sec1Step2Desc') }}</p>
               </div>
             </div>
           </div>
@@ -58,51 +58,48 @@
         </div>
         <div class="bg-white border border-gray-100 rounded-2xl p-6 space-y-5 shadow-sm">
           <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-amber-800 text-xs font-medium">
-            AIアドバイザーの利用にはアカウント登録（無料）が必要です
+            {{ t('guide.sec2Warning') }}
           </div>
 
           <div class="space-y-4">
             <div class="flex items-start gap-4">
               <div class="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</div>
               <div>
-                <div class="font-semibold text-gray-800 mb-1">コンテキストを選ぶ</div>
-                <p class="text-gray-500">画面左のサイドバー（スマホはタブ）からシーンを選択します。「ビジネス」「恋愛」「友人関係」「交渉」の4種類から状況に合ったものを選んでください。</p>
+                <div class="font-semibold text-gray-800 mb-1">{{ t('guide.sec2Step1Title') }}</div>
+                <p class="text-gray-500">{{ t('guide.sec2Step1Desc') }}</p>
               </div>
             </div>
             <div class="flex items-start gap-4">
               <div class="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</div>
               <div>
-                <div class="font-semibold text-gray-800 mb-1">状況を入力する</div>
-                <p class="text-gray-500">テキストエリアに悩んでいる状況を具体的に書いてください。詳細に書くほど、より的確なアドバイスが返ってきます。</p>
+                <div class="font-semibold text-gray-800 mb-1">{{ t('guide.sec2Step2Title') }}</div>
+                <p class="text-gray-500">{{ t('guide.sec2Step2Desc') }}</p>
                 <div class="mt-2 bg-gray-50 rounded-lg p-3 text-gray-600 text-xs">
-                  <div class="font-semibold mb-1">入力例</div>
-                  「上司に新しい企画を提案したいのですが、いつも話を聞いてもらえません。今週金曜にプレゼンの機会があります。どうすれば通せるでしょうか？」
+                  <div class="font-semibold mb-1">{{ t('guide.sec2Step2ExampleLabel') }}</div>
+                  {{ t('guide.sec2Step2Example') }}
                 </div>
               </div>
             </div>
             <div class="flex items-start gap-4">
               <div class="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</div>
               <div>
-                <div class="font-semibold text-gray-800 mb-1">送信する</div>
-                <p class="text-gray-500">「送信」ボタンをクリック、またはキーボードの <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs">⌘ + Enter</code>（Windowsは <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs">Ctrl + Enter</code>）で送信できます。</p>
+                <div class="font-semibold text-gray-800 mb-1">{{ t('guide.sec2Step3Title') }}</div>
+                <p class="text-gray-500">{{ t('guide.sec2Step3Desc') }}</p>
               </div>
             </div>
             <div class="flex items-start gap-4">
               <div class="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</div>
               <div>
-                <div class="font-semibold text-gray-800 mb-1">アドバイスを受け取る</div>
-                <p class="text-gray-500">AIがリアルタイムで回答を生成します。適用すべき法則の解説、具体的なアドバイス、実際に使えるセリフ例が返ってきます。</p>
+                <div class="font-semibold text-gray-800 mb-1">{{ t('guide.sec2Step4Title') }}</div>
+                <p class="text-gray-500">{{ t('guide.sec2Step4Desc') }}</p>
               </div>
             </div>
           </div>
 
           <div class="border-t border-gray-100 pt-4">
-            <div class="font-semibold text-gray-800 mb-2">より良いアドバイスをもらうコツ</div>
+            <div class="font-semibold text-gray-800 mb-2">{{ t('guide.sec2TipsTitle') }}</div>
             <ul class="list-disc pl-4 space-y-1 text-gray-500">
-              <li>相手との関係性（上司・初対面・長年の友人など）を書く</li>
-              <li>過去に試みた行動があれば記載する</li>
-              <li>達成したい具体的なゴールを書く</li>
-              <li>いつまでに解決したいかの期限があれば書く</li>
+              <li v-for="tip in t('guide.sec2Tips')" :key="tip">{{ tip }}</li>
             </ul>
           </div>
         </div>
@@ -144,7 +141,7 @@
           <h2 class="text-lg font-bold text-gray-900">{{ t('guide.faqTitle') }}</h2>
         </div>
         <div class="space-y-3">
-          <div v-for="faq in faqs" :key="faq.q" class="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+          <div v-for="(faq, i) in faqItems" :key="i" class="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
             <button
               @click="faq.open = !faq.open"
               class="w-full text-left px-5 py-4 flex items-center justify-between gap-3 hover:bg-gray-50 transition-colors"
@@ -171,41 +168,13 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-const faqs = reactive([
-  {
-    q: 'AIアドバイザーはどのAIを使っていますか？',
-    a: 'Anthropic社のClaude（claude-sonnet-4-6）を使用しています。チャルディーニの7つの法則を元に状況を分析し、具体的なアドバイスと実践的なセリフ例を生成します。',
-    open: false,
-  },
-  {
-    q: '月5回のカウントはいつリセットされますか？',
-    a: '毎月1日にリセットされます。例えば3月中に5回使い切っても、4月1日になると再び5回ご利用いただけます。',
-    open: false,
-  },
-  {
-    q: 'AIに入力した内容は保存されますか？',
-    a: 'チャット履歴はブラウザのセッション内のみで保持され、サーバーへは保存されません。ページを閉じると会話内容はリセットされます。なお、AI処理のためAnthropicのAPIにテキストが送信されます。',
-    open: false,
-  },
-  {
-    q: 'プレミアムプランに変更したのに「残り0回」と表示されます',
-    a: 'ページをリロードしてください。決済完了後にアカウント情報が更新されます。それでも解消しない場合はお問い合わせください。',
-    open: false,
-  },
-  {
-    q: '解約はどこからできますか？',
-    a: '料金ページからサブスクリプション管理画面を開き、解約手続きができます。次回更新日の前日までに解約すれば翌月分の請求は発生しません。',
-    open: false,
-  },
-  {
-    q: 'スマートフォンでも使えますか？',
-    a: 'はい。スマートフォン・タブレットに対応したレスポンシブデザインになっています。アプリのインストールは不要で、ブラウザからそのままご利用いただけます。',
-    open: false,
-  },
-])
+// Build FAQ as reactive array from locale so open state can be tracked
+const faqItems = computed(() =>
+  t('guide.faq').map(item => reactive({ ...item, open: false }))
+)
 </script>

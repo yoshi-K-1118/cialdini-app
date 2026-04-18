@@ -232,13 +232,13 @@ async function sendMessage() {
     })
 
     if (response.status === 401) {
-      messages.value.push({ role: 'ai', content: '## ログインが必要です\n\nAIアドバイスを利用するには[ログイン](/login)してください。' })
+      messages.value.push({ role: 'ai', content: t('advisor.errorLogin') })
       isStreaming.value = false
       return
     }
     if (response.status === 403) {
       limitReached.value = true
-      messages.value.push({ role: 'ai', content: '## 今月の無料回数に達しました\n\nプレミアムプラン（¥980/月）にアップグレードすると無制限でご利用いただけます。' })
+      messages.value.push({ role: 'ai', content: t('advisor.errorLimit') })
       isStreaming.value = false
       await fetchProfile()
       return
@@ -278,7 +278,7 @@ async function sendMessage() {
       currentMessage.value = ''
     }
   } catch (err) {
-    messages.value.push({ role: 'ai', content: `## エラーが発生しました\n\n${err.message}` })
+    messages.value.push({ role: 'ai', content: `## ${t('advisor.errorGeneral')}\n\n${err.message}` })
   } finally {
     isStreaming.value = false
     currentMessage.value = ''
