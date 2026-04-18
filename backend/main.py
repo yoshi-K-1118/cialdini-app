@@ -33,6 +33,7 @@ class AdvisorRequest(BaseModel):
 class CheckoutRequest(BaseModel):
     user_id: str
     email: str
+    locale: str = "ja"
 
 class ContactRequest(BaseModel):
     name: str
@@ -98,10 +99,15 @@ async def get_profile(authorization: str = Header(None)):
 @app.post("/api/stripe/create-checkout")
 async def create_checkout(req: CheckoutRequest, authorization: str = Header(None)):
     await get_current_user(authorization)
+    price_id = (
+        os.environ["STRIPE_PRICE_ID_USD"]
+        if req.locale == "en"
+        else os.environ["STRIPE_PRICE_ID"]
+    )
     session = stripe.checkout.Session.create(
         customer_email=req.email,
         payment_method_types=["card"],
-        line_items=[{"price": os.environ["STRIPE_PRICE_ID"], "quantity": 1}],
+        line_items=[{"price": price_id, "quantity": 1}],
         mode="subscription",
         success_url=os.environ["FRONTEND_URL"] + "/success?session_id={CHECKOUT_SESSION_ID}",
         cancel_url=os.environ["FRONTEND_URL"] + "/pricing",

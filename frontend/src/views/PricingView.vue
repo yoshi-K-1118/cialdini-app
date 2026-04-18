@@ -11,7 +11,7 @@
         <div class="mb-6">
           <h2 class="text-lg font-bold text-gray-900 mb-1">{{ t('pricing.freePlan') }}</h2>
           <div class="flex items-end gap-1">
-            <span class="text-4xl font-bold text-gray-900">¥0</span>
+            <span class="text-4xl font-bold text-gray-900">{{ t('pricing.freePrice') }}</span>
             <span class="text-gray-400 mb-1">{{ t('pricing.perMonth') }}</span>
           </div>
         </div>
@@ -44,7 +44,7 @@
         <div class="mb-6">
           <h2 class="text-lg font-bold text-white mb-1">{{ t('pricing.premiumPlan') }}</h2>
           <div class="flex items-end gap-1">
-            <span class="text-4xl font-bold text-white">¥980</span>
+            <span class="text-4xl font-bold text-white">{{ t('pricing.premiumPrice') }}</span>
             <span class="text-indigo-200 mb-1">{{ t('pricing.perMonth') }}</span>
           </div>
         </div>
@@ -95,7 +95,7 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { authStore, supabase } from '../stores/auth.js'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const router = useRouter()
 const checkoutLoading = ref(false)
 const portalLoading = ref(false)
@@ -112,7 +112,7 @@ async function handleUpgrade() {
     const res = await fetch(`${apiBase}/api/stripe/create-checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ user_id: authStore.user.id, email: authStore.user.email }),
+      body: JSON.stringify({ user_id: authStore.user.id, email: authStore.user.email, locale: locale.value }),
     })
     const data = await res.json()
     if (data.url) window.location.href = data.url

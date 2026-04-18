@@ -45,6 +45,8 @@ export default {
     title: 'シンプルな料金プラン',
     desc: 'まずは無料でお試し。いつでもアップグレード・解約できます。',
     freePlan: 'フリープラン',
+    freePrice: '¥0',
+    premiumPrice: '¥980',
     perMonth: '/月',
     feature1: '7つの法則の解説（無制限）',
     feature2: 'AIアドバイス 月5回まで',

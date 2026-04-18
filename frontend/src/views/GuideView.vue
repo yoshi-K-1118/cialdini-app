@@ -115,7 +115,7 @@
           <div class="grid sm:grid-cols-2 gap-4">
             <div class="border-2 border-gray-200 rounded-xl p-5">
               <div class="font-bold text-gray-900 mb-1">{{ t('pricing.freePlan') }}</div>
-              <div class="text-2xl font-bold text-gray-900 mb-3">¥0 <span class="text-sm font-normal text-gray-400">{{ t('pricing.perMonth') }}</span></div>
+              <div class="text-2xl font-bold text-gray-900 mb-3">{{ t('pricing.freePrice') }} <span class="text-sm font-normal text-gray-400">{{ t('pricing.perMonth') }}</span></div>
               <ul class="space-y-2 text-gray-600 text-xs">
                 <li class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> {{ t('pricing.feature1') }}</li>
                 <li class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> {{ t('pricing.feature2') }}</li>
@@ -123,7 +123,7 @@
             </div>
             <div class="border-2 border-indigo-600 bg-indigo-600 rounded-xl p-5">
               <div class="font-bold text-white mb-1">{{ t('pricing.premiumPlan') }}</div>
-              <div class="text-2xl font-bold text-white mb-3">¥980 <span class="text-sm font-normal text-indigo-200">{{ t('pricing.perMonth') }}</span></div>
+              <div class="text-2xl font-bold text-white mb-3">{{ t('pricing.premiumPrice') }} <span class="text-sm font-normal text-indigo-200">{{ t('pricing.perMonth') }}</span></div>
               <ul class="space-y-2 text-indigo-100 text-xs">
                 <li class="flex items-center gap-1.5"><span class="text-white font-bold">✓</span> {{ t('pricing.feature1') }}</li>
                 <li class="flex items-center gap-1.5"><span class="text-white font-bold">✓</span> {{ t('pricing.feature3') }}</li>
