@@ -73,6 +73,12 @@
           class="w-full text-center bg-white hover:bg-indigo-50 disabled:opacity-70 text-indigo-700 font-semibold py-2.5 rounded-xl transition-colors text-sm">
           {{ checkoutLoading ? t('pricing.processing') : t('pricing.upgrade') }}
         </button>
+        <div v-if="checkoutError" class="mt-3 text-white/90 bg-white/20 text-xs rounded-xl px-3 py-2 text-center">
+          {{ checkoutError }}
+        </div>
+        <div v-if="portalError" class="mt-3 text-white/90 bg-white/20 text-xs rounded-xl px-3 py-2 text-center">
+          {{ portalError }}
+        </div>
       </div>
     </div>
 
@@ -99,6 +105,8 @@ const { t, locale } = useI18n()
 const router = useRouter()
 const checkoutLoading = ref(false)
 const portalLoading = ref(false)
+const checkoutError = ref('')
+const portalError = ref('')
 
 async function handleUpgrade() {
   if (!authStore.user) {
@@ -106,6 +114,7 @@ async function handleUpgrade() {
     return
   }
   checkoutLoading.value = true
+  checkoutError.value = ''
   try {
     const token = (await supabase.auth.getSession()).data.session?.access_token
     const apiBase = import.meta.env.VITE_API_BASE_URL || ''
@@ -117,13 +126,14 @@ async function handleUpgrade() {
     const data = await res.json()
     if (data.url) window.location.href = data.url
   } catch (e) {
-    alert(t('pricing.error'))
+    checkoutError.value = t('pricing.error')
   }
   checkoutLoading.value = false
 }
 
 async function handleManage() {
   portalLoading.value = true
+  portalError.value = ''
   try {
     const token = (await supabase.auth.getSession()).data.session?.access_token
     const apiBase = import.meta.env.VITE_API_BASE_URL || ''
@@ -134,7 +144,7 @@ async function handleManage() {
     const data = await res.json()
     if (data.url) window.location.href = data.url
   } catch (e) {
-    alert(t('pricing.error'))
+    portalError.value = t('pricing.error')
   }
   portalLoading.value = false
 }

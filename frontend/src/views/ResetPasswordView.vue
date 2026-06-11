@@ -88,7 +88,6 @@ onMounted(async () => {
     // PKCE フロー
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (error) {
-      console.error('exchangeCodeForSession error:', error.message, error.status)
       tokenError.value = true
     } else {
       sessionReady.value = true
@@ -97,7 +96,6 @@ onMounted(async () => {
     // OTP token_hash フロー
     const { error } = await supabase.auth.verifyOtp({ token_hash, type })
     if (error) {
-      console.error('verifyOtp error:', error.message, error.status)
       tokenError.value = true
     } else {
       sessionReady.value = true
@@ -127,7 +125,6 @@ async function handleReset() {
   try {
     const { error } = await supabase.auth.updateUser({ password: newPassword.value })
     if (error) {
-      console.error('updateUser error:', error.message, error.status)
       errorMsg.value = error.status === 422
         ? t('resetPassword.errorSamePassword')
         : t('resetPassword.error')
@@ -135,7 +132,6 @@ async function handleReset() {
       successMsg.value = t('resetPassword.successMsg')
     }
   } catch (e) {
-    console.error('updateUser exception:', e)
     errorMsg.value = t('resetPassword.error')
   } finally {
     loading.value = false
