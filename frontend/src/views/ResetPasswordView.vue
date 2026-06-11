@@ -99,11 +99,13 @@ async function handleReset() {
     const update = supabase.auth.updateUser({ password: newPassword.value })
     const { error } = await Promise.race([update, timeout])
     if (error) {
+      console.error('updateUser error:', error.message, error.status)
       errorMsg.value = t('resetPassword.error')
     } else {
       successMsg.value = t('resetPassword.successMsg')
     }
-  } catch {
+  } catch (e) {
+    console.error('updateUser exception:', e)
     errorMsg.value = t('resetPassword.error')
   } finally {
     loading.value = false
