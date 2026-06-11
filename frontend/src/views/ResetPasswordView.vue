@@ -11,6 +11,7 @@
       </div>
 
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <!-- 成功 -->
         <div v-if="successMsg" class="bg-indigo-50 text-indigo-700 text-sm rounded-xl px-4 py-4 text-center">
           <div class="text-2xl mb-2">✅</div>
           <div class="font-semibold">{{ successMsg }}</div>
@@ -19,10 +20,20 @@
           </RouterLink>
         </div>
 
+        <!-- リンク期限切れ / トークンエラー -->
+        <div v-else-if="tokenError" class="bg-red-50 text-red-600 text-sm rounded-xl px-4 py-4 text-center">
+          <div class="font-semibold mb-3">{{ t('resetPassword.error') }}</div>
+          <RouterLink to="/forgot-password" class="inline-block text-indigo-600 hover:underline font-medium">
+            {{ t('resetPassword.requestAgain') }}
+          </RouterLink>
+        </div>
+
+        <!-- セッション確立中 -->
         <div v-else-if="!sessionReady" class="text-center text-sm text-gray-500 py-4">
           {{ t('resetPassword.verifying') }}
         </div>
 
+        <!-- パスワード変更フォーム -->
         <form v-else @submit.prevent="handleReset" class="space-y-5">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ t('resetPassword.newPassword') }}</label>
@@ -63,22 +74,33 @@ const loading = ref(false)
 const errorMsg = ref('')
 const successMsg = ref('')
 const sessionReady = ref(false)
+const tokenError = ref(false)
 
 let unsubscribe = null
 
 onMounted(async () => {
-  // イベントが先に発火した場合に備え、既存セッションを確認
-  const { data: { session } } = await supabase.auth.getSession()
-  if (session) {
-    sessionReady.value = true
-  }
+  const params = new URLSearchParams(window.location.search)
+  const token_hash = params.get('token_hash')
+  const type = params.get('type')
 
-  const { data } = supabase.auth.onAuthStateChange((event) => {
-    if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') {
+  if (token_hash && type) {
+    // URLのtoken_hashを明示的にverifyOtpで処理（Supabase v2 標準フロー）
+    const { error } = await supabase.auth.verifyOtp({ token_hash, type })
+    if (error) {
+      console.error('verifyOtp error:', error.message, error.status)
+      tokenError.value = true
+    } else {
       sessionReady.value = true
     }
-  })
-  unsubscribe = data.subscription
+  } else {
+    // hash フラグメント方式のフォールバック（PASSWORD_RECOVERY イベント待機）
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        sessionReady.value = true
+      }
+    })
+    unsubscribe = data.subscription
+  }
 })
 
 onUnmounted(() => {
@@ -93,11 +115,7 @@ async function handleReset() {
   }
   loading.value = true
   try {
-    const timeout = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('timeout')), 15000)
-    )
-    const update = supabase.auth.updateUser({ password: newPassword.value })
-    const { error } = await Promise.race([update, timeout])
+    const { error } = await supabase.auth.updateUser({ password: newPassword.value })
     if (error) {
       console.error('updateUser error:', error.message, error.status)
       errorMsg.value = t('resetPassword.error')

@@ -100,7 +100,8 @@ export default {
     verifying: 'Verifying your session...',
     mismatch: 'Passwords do not match.',
     successMsg: 'Your password has been updated. Please log in with your new password.',
-    error: 'Failed to update password. The link may have expired. Please request a new password reset.',
+    error: 'Failed to update password. The link may have expired.',
+    requestAgain: 'Request a new password reset',
   },
   register: {
     title: 'Create Account',
