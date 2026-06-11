@@ -66,9 +66,15 @@ const sessionReady = ref(false)
 
 let unsubscribe = null
 
-onMounted(() => {
+onMounted(async () => {
+  // イベントが先に発火した場合に備え、既存セッションを確認
+  const { data: { session } } = await supabase.auth.getSession()
+  if (session) {
+    sessionReady.value = true
+  }
+
   const { data } = supabase.auth.onAuthStateChange((event) => {
-    if (event === 'PASSWORD_RECOVERY') {
+    if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') {
       sessionReady.value = true
     }
   })
@@ -86,12 +92,21 @@ async function handleReset() {
     return
   }
   loading.value = true
-  const { error } = await supabase.auth.updateUser({ password: newPassword.value })
-  if (error) {
+  try {
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('timeout')), 15000)
+    )
+    const update = supabase.auth.updateUser({ password: newPassword.value })
+    const { error } = await Promise.race([update, timeout])
+    if (error) {
+      errorMsg.value = t('resetPassword.error')
+    } else {
+      successMsg.value = t('resetPassword.successMsg')
+    }
+  } catch {
     errorMsg.value = t('resetPassword.error')
-  } else {
-    successMsg.value = t('resetPassword.successMsg')
+  } finally {
+    loading.value = false
   }
-  loading.value = false
 }
 </script>
