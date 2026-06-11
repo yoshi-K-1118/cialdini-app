@@ -83,12 +83,6 @@ onMounted(async () => {
   const token_hash = params.get('token_hash')
   const type = params.get('type')
   const code = params.get('code')
-  const hashStr = window.location.hash
-
-  // デバッグ: URL情報をコンソールに出力
-  console.log('[ResetPassword] search:', window.location.search)
-  console.log('[ResetPassword] hash:', hashStr)
-  console.log('[ResetPassword] token_hash:', token_hash, 'type:', type, 'code:', code)
 
   if (code) {
     // PKCE フロー
