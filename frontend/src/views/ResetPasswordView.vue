@@ -134,7 +134,9 @@ async function handleReset() {
     const { error } = await supabase.auth.updateUser({ password: newPassword.value })
     if (error) {
       console.error('updateUser error:', error.message, error.status)
-      errorMsg.value = t('resetPassword.error')
+      errorMsg.value = error.status === 422
+        ? t('resetPassword.errorSamePassword')
+        : t('resetPassword.error')
     } else {
       successMsg.value = t('resetPassword.successMsg')
     }

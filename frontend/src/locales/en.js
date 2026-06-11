@@ -101,6 +101,7 @@ export default {
     mismatch: 'Passwords do not match.',
     successMsg: 'Your password has been updated. Please log in with your new password.',
     error: 'Failed to update password. The link may have expired.',
+    errorSamePassword: 'New password must be different from your current password.',
     requestAgain: 'Request a new password reset',
   },
   register: {

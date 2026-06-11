@@ -101,6 +101,7 @@ export default {
     mismatch: 'パスワードが一致しません。',
     successMsg: 'パスワードを変更しました。新しいパスワードでログインしてください。',
     error: 'パスワードの変更に失敗しました。リンクの有効期限が切れている可能性があります。',
+    errorSamePassword: '現在のパスワードと異なるパスワードを設定してください。',
     requestAgain: 'パスワードリセットを再申請する',
   },
   register: {
