@@ -22,13 +22,18 @@ export async function initAuth() {
 
   supabase.auth.onAuthStateChange(async (event, session) => {
     authStore.user = session?.user ?? null
-    if (authStore.user) await fetchProfile()
-    else authStore.profile = null
+    if (authStore.user && event !== 'PASSWORD_RECOVERY') {
+      await fetchProfile(session?.access_token)
+    } else if (!authStore.user) {
+      authStore.profile = null
+    }
   })
 }
 
-export async function fetchProfile() {
-  const token = (await supabase.auth.getSession()).data.session?.access_token
+export async function fetchProfile(token) {
+  if (!token) {
+    token = (await supabase.auth.getSession()).data.session?.access_token
+  }
   if (!token) return
   const apiBase = import.meta.env.VITE_API_BASE_URL || ''
   const res = await fetch(`${apiBase}/api/user/profile`, {
