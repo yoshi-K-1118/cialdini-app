@@ -34,7 +34,11 @@
           </button>
         </form>
 
-        <p class="text-center text-sm text-gray-500 mt-6">
+        <p class="text-center text-sm mt-4">
+          <RouterLink to="/forgot-password" class="text-indigo-600 text-sm hover:underline">{{ t('login.forgotPassword') }}</RouterLink>
+        </p>
+
+        <p class="text-center text-sm text-gray-500 mt-3">
           {{ t('login.noAccount') }}
           <RouterLink to="/register" class="text-indigo-600 font-medium hover:underline">{{ t('login.register') }}</RouterLink>
         </p>

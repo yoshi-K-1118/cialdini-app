@@ -12,6 +12,8 @@ import DisclaimerView from '../views/DisclaimerView.vue'
 import GuideView from '../views/GuideView.vue'
 import ContactView from '../views/ContactView.vue'
 import LegalView from '../views/LegalView.vue'
+import ForgotPasswordView from '../views/ForgotPasswordView.vue'
+import ResetPasswordView from '../views/ResetPasswordView.vue'
 import { authStore } from '../stores/auth.js'
 
 const router = createRouter({
@@ -30,6 +32,8 @@ const router = createRouter({
     { path: '/guide', component: GuideView },
     { path: '/contact', component: ContactView },
     { path: '/legal', component: LegalView },
+    { path: '/forgot-password', component: ForgotPasswordView },
+    { path: '/reset-password', component: ResetPasswordView },
   ],
   scrollBehavior: () => ({ top: 0 }),
 })
