@@ -82,9 +82,25 @@ onMounted(async () => {
   const params = new URLSearchParams(window.location.search)
   const token_hash = params.get('token_hash')
   const type = params.get('type')
+  const code = params.get('code')
+  const hashStr = window.location.hash
 
-  if (token_hash && type) {
-    // URLのtoken_hashを明示的にverifyOtpで処理（Supabase v2 標準フロー）
+  // デバッグ: URL情報をコンソールに出力
+  console.log('[ResetPassword] search:', window.location.search)
+  console.log('[ResetPassword] hash:', hashStr)
+  console.log('[ResetPassword] token_hash:', token_hash, 'type:', type, 'code:', code)
+
+  if (code) {
+    // PKCE フロー
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    if (error) {
+      console.error('exchangeCodeForSession error:', error.message, error.status)
+      tokenError.value = true
+    } else {
+      sessionReady.value = true
+    }
+  } else if (token_hash && type) {
+    // OTP token_hash フロー
     const { error } = await supabase.auth.verifyOtp({ token_hash, type })
     if (error) {
       console.error('verifyOtp error:', error.message, error.status)
